@@ -1,5 +1,8 @@
 {
   "expo": {
+    "extra": {
+      "apiServer": "http://192.168.0.8:3000"
+    },
     "name": "A-ToDo-Client",
     "slug": "A-ToDo-Client",
     "version": "1.0.0",
