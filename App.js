@@ -11,40 +11,48 @@ import TodoList from './components/TodoList';
 
 export default function App() {
   const [loadingCount, setLoadingCount] = useState(0);
+  const callAPI =
+    ({ path, method, headers, body }, callback) =>
+    () => {
+      setLoadingCount((prev) => prev + 1);
+
+      return fetch(Constants.expoConfig.extra.apiServer + path, {
+        method,
+        headers: {
+          Accept: 'application/json',
+          'Content-Type': body ? 'application/json' : undefined,
+          ...headers,
+        },
+        body: JSON.stringify(body),
+      })
+        .then((res) => {
+          if (!res.ok) throw new Error(res.status);
+          return res.json();
+        })
+        .then(callback)
+        .catch((err) => {
+          ToastAndroid.show(
+            'fail to fetch, please try again later',
+            ToastAndroid.LONG
+          );
+        })
+        .finally(() => {
+          setLoadingCount((prev) => prev - 1);
+        });
+    };
+
   const [todoList, setTodoList] = useState([]);
+  const fetchTodoList = callAPI(
+    { path: '/todos', method: 'GET' },
+    ({ message, data }) => {
+      if (!data) throw new Error(message);
+      setTodoList(data);
+    }
+  );
 
-  const fetchTodoList = () => {
-    setLoadingCount((prev) => prev + 1);
-
-    fetch(Constants.expoConfig.extra.apiServer + '/todos', {
-      method: 'GET',
-      headers: {
-        Accept: 'application/json',
-      },
-    })
-      .then((res) => {
-        if (!res.ok) throw new Error(res.status);
-
-        return res.json();
-      })
-      .then((body) => {
-        const { message, data } = body;
-        if (!data) throw new Error(message);
-
-        setTodoList(data);
-      })
-      .catch((err) => {
-        ToastAndroid.show(
-          'fail to fetch todo list, please re-start application',
-          ToastAndroid.LONG
-        );
-      })
-      .finally(() => {
-        setLoadingCount((prev) => prev - 1);
-      });
-  };
-
-  useEffect(fetchTodoList, []);
+  useEffect(() => {
+    fetchTodoList();
+  }, []);
 
   return (
     <View
