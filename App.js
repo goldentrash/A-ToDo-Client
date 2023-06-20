@@ -67,7 +67,10 @@ export default function App() {
       pointerEvents={loadingCount === 0 ? 'auto' : 'none'}
     >
       <FloatingButtonLayout callApiThenFetchTodoList={callApiThenFetchTodoList}>
-        <TodoList todoList={todoList} />
+        <TodoList
+          todoList={todoList}
+          callApiThenFetchTodoList={callApiThenFetchTodoList}
+        />
       </FloatingButtonLayout>
 
       <StatusBar style="auto" />
