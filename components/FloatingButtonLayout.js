@@ -51,11 +51,15 @@ const AddTodoModal = ({ callApiThenFetchTodoList, onRequestClose }) => {
     setDeadline(text);
   };
 
+  const dateObj = new Date(deadline);
+  const deadlineString = `
+    ${dateObj.getFullYear()}-${dateObj.getMonth() + 1}-${dateObj.getDate()}
+  `;
   const addToDoThenFetchTodoList = callApiThenFetchTodoList(
     {
       path: '/todos',
       method: 'POST',
-      body: { content, deadline },
+      body: { content, deadline: deadlineString },
     },
     onRequestClose
   );
