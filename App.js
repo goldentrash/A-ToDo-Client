@@ -8,6 +8,7 @@ import {
 import { useEffect, useState } from 'react';
 import Constants from 'expo-constants';
 import TodoList from './components/TodoList';
+import FloatingButtonLayout from './components/FloatingButtonLayout';
 
 export default function App() {
   const [loadingCount, setLoadingCount] = useState(0);
@@ -59,8 +60,12 @@ export default function App() {
       style={styles.container}
       pointerEvents={loadingCount === 0 ? 'auto' : 'none'}
     >
-      <TodoList todoList={todoList} />
+      <FloatingButtonLayout callAPI={callAPI} fetchTodoList={fetchTodoList}>
+        <TodoList todoList={todoList} />
+      </FloatingButtonLayout>
+
       <StatusBar style="auto" />
+
       {loadingCount !== 0 && (
         <View style={styles.activityIndicatorContainer}>
           <ActivityIndicator />
