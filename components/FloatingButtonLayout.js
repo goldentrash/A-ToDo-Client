@@ -3,8 +3,7 @@ import { StyleSheet, Modal, View, Button, Text, TextInput } from 'react-native';
 
 export default FloatingButtonLayout = ({
   children,
-  callAPI,
-  fetchTodoList,
+  callApiThenFetchTodoList,
 }) => {
   const [addTodoModalVisible, setAddTodoModalVisible] = useState(false);
   const openAddTodoModal = () => setAddTodoModalVisible(true);
@@ -20,16 +19,15 @@ export default FloatingButtonLayout = ({
 
       {addTodoModalVisible && (
         <AddTodoModal
-          callAPI={callAPI}
           onRequestClose={closeAddTodoModal}
-          fetchTodoList={fetchTodoList}
+          callApiThenFetchTodoList={callApiThenFetchTodoList}
         />
       )}
     </>
   );
 };
 
-const AddTodoModal = ({ callAPI, onRequestClose, fetchTodoList }) => {
+const AddTodoModal = ({ callApiThenFetchTodoList, onRequestClose }) => {
   const [content, setContent] = useState('');
   const [contentErrMsg, setContentErrMsg] = useState('content required');
   const updateContent = (text) => {
@@ -53,12 +51,13 @@ const AddTodoModal = ({ callAPI, onRequestClose, fetchTodoList }) => {
     setDeadline(text);
   };
 
-  const addToDo = callAPI(
-    { path: '/todos', method: 'POST', body: { content, deadline } },
-    ({ message }) => {
-      fetchTodoList();
-      onRequestClose();
-    }
+  const addToDoThenFetchTodoList = callApiThenFetchTodoList(
+    {
+      path: '/todos',
+      method: 'POST',
+      body: { content, deadline },
+    },
+    onRequestClose
   );
 
   return (
@@ -98,7 +97,6 @@ const AddTodoModal = ({ callAPI, onRequestClose, fetchTodoList }) => {
                   ]}
                 />
               </View>
-
               {deadlineErrMsg && (
                 <Text style={styles.modalErrorMessage}>{deadlineErrMsg}</Text>
               )}
@@ -106,7 +104,7 @@ const AddTodoModal = ({ callAPI, onRequestClose, fetchTodoList }) => {
           </View>
 
           <Button
-            onPress={addToDo}
+            onPress={addToDoThenFetchTodoList}
             title="add todo"
             disabled={contentErrMsg !== '' || deadlineErrMsg !== ''}
           />

@@ -12,7 +12,7 @@ import FloatingButtonLayout from './components/FloatingButtonLayout';
 
 export default function App() {
   const [loadingCount, setLoadingCount] = useState(0);
-  const callAPI =
+  const callApi =
     ({ path, method, headers, body }, callback) =>
     () => {
       setLoadingCount((prev) => prev + 1);
@@ -43,7 +43,7 @@ export default function App() {
     };
 
   const [todoList, setTodoList] = useState([]);
-  const fetchTodoList = callAPI(
+  const fetchTodoList = callApi(
     { path: '/todos', method: 'GET' },
     ({ message, data }) => {
       if (!data) throw new Error(message);
@@ -55,12 +55,18 @@ export default function App() {
     fetchTodoList();
   }, []);
 
+  const callApiThenFetchTodoList = (requestArgs, callback) =>
+    callApi(requestArgs, () => {
+      callback();
+      fetchTodoList();
+    });
+
   return (
     <View
       style={styles.container}
       pointerEvents={loadingCount === 0 ? 'auto' : 'none'}
     >
-      <FloatingButtonLayout callAPI={callAPI} fetchTodoList={fetchTodoList}>
+      <FloatingButtonLayout callApiThenFetchTodoList={callApiThenFetchTodoList}>
         <TodoList todoList={todoList} />
       </FloatingButtonLayout>
 
