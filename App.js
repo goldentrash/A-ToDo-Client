@@ -48,7 +48,13 @@ export default function App() {
     { path: '/todos', method: 'GET' },
     ({ message, data }) => {
       if (!data) throw new Error(message);
-      setTodoList(data);
+
+      setTodoList(
+        data.map(({ deadline, ...properties }) => ({
+          deadline: deadline.slice(0, 10),
+          ...properties,
+        }))
+      );
     }
   );
 
@@ -57,7 +63,13 @@ export default function App() {
     { path: '/doings', method: 'GET' },
     ({ message, data }) => {
       if (!data) throw new Error(message);
-      setDoing(data[0]);
+
+      setDoing(
+        data.map(({ deadline, ...properties }) => ({
+          deadline: deadline.slice(0, 10),
+          ...properties,
+        }))[0]
+      );
     }
   );
 
