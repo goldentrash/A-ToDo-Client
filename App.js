@@ -84,7 +84,10 @@ export default function App() {
     >
       <FloatingButtonLayout callApiThenFetchTodoList={callApiThenFetchTodoList}>
         {doing ? (
-          <Doing doing={doing} />
+          <Doing
+            doing={doing}
+            callApiThenFetchTodoListAndDoing={callApiThenFetchTodoListAndDoing}
+          />
         ) : (
           <TodoList
             todoList={todoList}
