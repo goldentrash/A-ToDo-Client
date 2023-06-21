@@ -7,6 +7,7 @@ import {
 } from 'react-native';
 import { useEffect, useState } from 'react';
 import Constants from 'expo-constants';
+import Doing from './components/Doing';
 import TodoList from './components/TodoList';
 import FloatingButtonLayout from './components/FloatingButtonLayout';
 
@@ -51,8 +52,17 @@ export default function App() {
     }
   );
 
+  const [doing, setDoing] = useState(null);
+  const fetchDoing = callApi(
+    { path: '/doings', method: 'GET' },
+    ({ message, data }) => {
+      if (!data) throw new Error(message);
+      setDoing(data[0]);
+    }
+  );
+
   useEffect(() => {
-    fetchTodoList();
+    Promise.all([fetchTodoList(), fetchDoing()]);
   }, []);
 
   const callApiThenFetchTodoList = (requestArgs, callback) =>
@@ -61,16 +71,26 @@ export default function App() {
       fetchTodoList();
     });
 
+  const callApiThenFetchTodoListAndDoing = (requestArgs, callback) =>
+    callApi(requestArgs, () => {
+      callback();
+      Promise.all([fetchTodoList(), fetchDoing()]);
+    });
+
   return (
     <View
       style={styles.container}
       pointerEvents={loadingCount === 0 ? 'auto' : 'none'}
     >
       <FloatingButtonLayout callApiThenFetchTodoList={callApiThenFetchTodoList}>
-        <TodoList
-          todoList={todoList}
-          callApiThenFetchTodoList={callApiThenFetchTodoList}
-        />
+        {doing ? (
+          <Doing doing={doing} />
+        ) : (
+          <TodoList
+            todoList={todoList}
+            callApiThenFetchTodoListAndDoing={callApiThenFetchTodoListAndDoing}
+          />
+        )}
       </FloatingButtonLayout>
 
       <StatusBar style="auto" />

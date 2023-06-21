@@ -9,7 +9,7 @@ import {
   View,
 } from 'react-native';
 
-const TodoList = ({ todoList, callApiThenFetchTodoList }) => {
+const TodoList = ({ todoList, callApiThenFetchTodoListAndDoing }) => {
   const [startDoingModalVisible, setStartDoingModalVisible] = useState(false);
   const openStartDoingModal = () => setStartDoingModalVisible(true);
   const closeStartDoingModal = () => setStartDoingModalVisible(false);
@@ -40,7 +40,7 @@ const TodoList = ({ todoList, callApiThenFetchTodoList }) => {
 
       {startDoingModalVisible && (
         <StartDoingModal
-          callApiThenFetchTodoList={callApiThenFetchTodoList}
+          callApiThenFetchTodoListAndDoing={callApiThenFetchTodoListAndDoing}
           onRequestClose={closeStartDoingModal}
           watchingTodo={watchingTodo}
         />
@@ -50,11 +50,11 @@ const TodoList = ({ todoList, callApiThenFetchTodoList }) => {
 };
 
 const StartDoingModal = ({
-  callApiThenFetchTodoList,
+  callApiThenFetchTodoListAndDoing,
   onRequestClose,
   watchingTodo: { id, content, deadline },
 }) => {
-  const startDoingThenFetchTodoList = callApiThenFetchTodoList(
+  const startDoingThenFetchTodoList = callApiThenFetchTodoListAndDoing(
     { path: '/doings', method: 'POST', body: { id } },
     onRequestClose
   );
