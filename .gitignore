@@ -17,4 +17,4 @@ web-build/
 .metro-health-check*
 
 # environment variable files
-env.json
+.env
