@@ -3,7 +3,7 @@
   "version": "0.0.0",
   "main": "node_modules/expo/AppEntry.js",
   "engines": {
-    "node": "^18.13.0"
+    "node": ">=16.18.1"
   },
   "repository": "https://github.com/goldentrash/A-ToDo-Client.git",
   "author": "goldentrash <startoflateness@gmail.com>",
