@@ -28,7 +28,7 @@ const Doing = ({
       () =>
         callApiThenFetchDoing(
           {
-            path: `/doings/${doings.id}/memos`,
+            path: `/doings/${doing.id}/memos`,
             method: 'PUT',
             body: { memo: text },
           },
