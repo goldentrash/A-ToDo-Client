@@ -11,7 +11,7 @@ module.exports = {
     owner: 'whitepiano',
     name: 'A-ToDo',
     slug: 'a-todo',
-    version: '0.0.0',
+    version: '0.1.0',
     orientation: 'portrait',
     icon: './assets/icon.png',
     userInterfaceStyle: 'light',
