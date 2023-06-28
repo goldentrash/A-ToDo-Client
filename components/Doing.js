@@ -1,15 +1,47 @@
 import { useState } from 'react';
-import { Button, Modal, View, Text, TextInput, StyleSheet } from 'react-native';
+import {
+  Button,
+  Modal,
+  View,
+  Text,
+  TextInput,
+  StyleSheet,
+  ToastAndroid,
+} from 'react-native';
 
-const Doing = ({ doing, callApiThenFetchTodoListAndDoing }) => {
+const Doing = ({
+  doing,
+  callApiThenFetchDoing,
+  callApiThenFetchTodoListAndDoing,
+}) => {
   const [finishDoingModalVisible, setFinishDoingModalVisible] = useState(false);
   const openFinishDoingModal = () => setFinishDoingModalVisible(true);
   const closeFinishDoingModal = () => setFinishDoingModalVisible(false);
 
-  const [memo, setMemo] = useState('');
+  const [timeoutId, setTimeoutId] = useState(0);
+  const [memo, setMemo] = useState(doing.memo);
+  const updateMemo = (text) => {
+    setMemo(text);
+
+    if (timeoutId) clearTimeout(timeoutId);
+    const latestTimeoutId = setTimeout(
+      () =>
+        callApiThenFetchDoing(
+          {
+            path: `/doings/${doings.id}/memos`,
+            method: 'PUT',
+            body: { memo: text },
+          },
+          () => {
+            ToastAndroid.show('memo saved', ToastAndroid.SHORT);
+          }
+        ),
+      3_000
+    );
+    setTimeoutId(latestTimeoutId);
+  };
 
   const { content, deadline } = doing;
-
   return (
     <>
       <View style={styles.viewerContainer}>
@@ -23,7 +55,7 @@ const Doing = ({ doing, callApiThenFetchTodoListAndDoing }) => {
             style={styles.viewerInputMemo}
             placeholder="memo"
             value={memo}
-            onChangeText={setMemo}
+            onChangeText={updateMemo}
             maxLength={200}
             multiline
           />
@@ -54,7 +86,7 @@ const FinishDoingModal = ({
     {
       path: '/dones',
       method: 'POST',
-      body: { id, memo },
+      body: { id },
     },
     onRequestClose
   );
