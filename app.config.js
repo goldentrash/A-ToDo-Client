@@ -5,7 +5,7 @@ module.exports = {
     extra: {
       apiServer: process.env.API_SERVER,
       eas: {
-        projectId: process.env.PROJECT_ID,
+        projectId: '896ff724-3702-47b7-9461-c9568d871676',
       },
     },
     owner: 'whitepiano',
