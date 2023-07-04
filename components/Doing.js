@@ -6,6 +6,7 @@ import {
   Text,
   TextInput,
   StyleSheet,
+  ScrollView,
   ToastAndroid,
 } from 'react-native';
 
@@ -96,9 +97,9 @@ const FinishDoingModal = ({
         <View style={styles.modalForeground}>
           <Text style={styles.modalTitle}>Finish Doing</Text>
 
-          <View style={styles.modalTextContainer}>
+          <ScrollView style={styles.modalTextContainer}>
             <Text style={styles.modalTextMemo}>{memo}</Text>
-          </View>
+          </ScrollView>
 
           <Button
             onPress={finishDoingThenFetchTodoListAndDoing}
