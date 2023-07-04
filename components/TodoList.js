@@ -6,6 +6,7 @@ import {
   Pressable,
   Text,
   StyleSheet,
+  ScrollView,
   View,
 } from 'react-native';
 
@@ -65,10 +66,10 @@ const StartTodoModal = ({
         <View style={styles.modalForeground}>
           <Text style={styles.modalTitle}>Start Todo</Text>
 
-          <View style={styles.modalTextContainer}>
+          <ScrollView style={styles.modalTextContainer}>
             <Text style={styles.modalTextContent}>{content}</Text>
             <Text style={styles.modalTextDeadline}>{deadline}</Text>
-          </View>
+          </ScrollView>
 
           <Button onPress={startTodoThenFetchTodoList} title="start todo" />
         </View>
