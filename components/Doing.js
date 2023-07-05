@@ -47,7 +47,9 @@ const Doing = ({
       <View style={styles.viewerContainer}>
         <View style={styles.viewerTextContainer}>
           <Text style={styles.viewerTextContent}>{content}</Text>
-          <Text style={styles.viewerTextDeadline}>{deadline}</Text>
+          <Text style={styles.viewerTextDeadline}>
+            {`by ${deadline.toString()}`}
+          </Text>
         </View>
 
         <View style={styles.viewerInputContainer}>
