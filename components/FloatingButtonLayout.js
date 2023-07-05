@@ -3,7 +3,7 @@ import { StyleSheet, Modal, View, Button, Text, TextInput } from 'react-native';
 
 export default FloatingButtonLayout = ({
   children,
-  callApiThenFetchTodoList,
+  genCallApiThenFetchTodoList,
 }) => {
   const [addTodoModalVisible, setAddTodoModalVisible] = useState(false);
   const openAddTodoModal = () => setAddTodoModalVisible(true);
@@ -20,14 +20,14 @@ export default FloatingButtonLayout = ({
       {addTodoModalVisible && (
         <AddTodoModal
           onRequestClose={closeAddTodoModal}
-          callApiThenFetchTodoList={callApiThenFetchTodoList}
+          genCallApiThenFetchTodoList={genCallApiThenFetchTodoList}
         />
       )}
     </>
   );
 };
 
-const AddTodoModal = ({ callApiThenFetchTodoList, onRequestClose }) => {
+const AddTodoModal = ({ genCallApiThenFetchTodoList, onRequestClose }) => {
   const [content, setContent] = useState('');
   const [contentErrMsg, setContentErrMsg] = useState('content required');
   const updateContent = (text) => {
@@ -58,7 +58,7 @@ const AddTodoModal = ({ callApiThenFetchTodoList, onRequestClose }) => {
   const deadlineString = `
     ${dateObj.getFullYear()}-${dateObj.getMonth() + 1}-${dateObj.getDate()}
   `.trim();
-  const addToDoThenFetchTodoList = callApiThenFetchTodoList(
+  const addToDoThenFetchTodoList = genCallApiThenFetchTodoList(
     {
       path: '/todos',
       method: 'POST',

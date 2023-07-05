@@ -13,7 +13,7 @@ import FloatingButtonLayout from './components/FloatingButtonLayout';
 
 export default function App() {
   const [loadingCount, setLoadingCount] = useState(0);
-  const callApi =
+  const genCallApi =
     ({ path, method, headers, body }, callback) =>
     () => {
       setLoadingCount((prev) => prev + 1);
@@ -44,7 +44,7 @@ export default function App() {
     };
 
   const [todoList, setTodoList] = useState([]);
-  const fetchTodoList = callApi(
+  const fetchTodoList = genCallApi(
     { path: '/todos', method: 'GET' },
     ({ message, data }) => {
       if (!data) throw new Error(message);
@@ -59,7 +59,7 @@ export default function App() {
   );
 
   const [doing, setDoing] = useState(null);
-  const fetchDoing = callApi(
+  const fetchDoing = genCallApi(
     { path: '/doings', method: 'GET' },
     ({ message, data }) => {
       if (!data) throw new Error(message);
@@ -77,20 +77,20 @@ export default function App() {
     Promise.all([fetchTodoList(), fetchDoing()]);
   }, []);
 
-  const callApiThenFetchTodoList = (requestArgs, callback) =>
-    callApi(requestArgs, () => {
+  const genCallApiThenFetchTodoList = (requestArgs, callback) =>
+    genCallApi(requestArgs, () => {
       callback();
       fetchTodoList();
     });
 
-  const callApiThenFetchDoing = (requestArgs, callback) =>
-    callApi(requestArgs, () => {
+  const genCallApiThenFetchDoing = (requestArgs, callback) =>
+    genCallApi(requestArgs, () => {
       callback();
       fetchDoing();
     });
 
-  const callApiThenFetchTodoListAndDoing = (requestArgs, callback) =>
-    callApi(requestArgs, () => {
+  const genCallApiThenFetchTodoListAndDoing = (requestArgs, callback) =>
+    genCallApi(requestArgs, () => {
       callback();
       Promise.all([fetchTodoList(), fetchDoing()]);
     });
@@ -100,17 +100,21 @@ export default function App() {
       style={styles.container}
       pointerEvents={loadingCount === 0 ? 'auto' : 'none'}
     >
-      <FloatingButtonLayout callApiThenFetchTodoList={callApiThenFetchTodoList}>
+      <FloatingButtonLayout
+        genCallApiThenFetchTodoList={genCallApiThenFetchTodoList}
+      >
         {doing ? (
           <Doing
             doing={doing}
-            callApiThenFetchDoing={callApiThenFetchDoing}
-            callApiThenFetchTodoListAndDoing={callApiThenFetchTodoListAndDoing}
+            genCallApi={genCallApi}
+            genCallApiThenFetchDoing={genCallApiThenFetchDoing}
           />
         ) : (
           <TodoList
             todoList={todoList}
-            callApiThenFetchTodoListAndDoing={callApiThenFetchTodoListAndDoing}
+            genCallApiThenFetchTodoListAndDoing={
+              genCallApiThenFetchTodoListAndDoing
+            }
           />
         )}
       </FloatingButtonLayout>

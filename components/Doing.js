@@ -7,41 +7,42 @@ import {
   TextInput,
   StyleSheet,
   ScrollView,
-  ToastAndroid,
 } from 'react-native';
 
 const Doing = ({
-  doing,
-  callApiThenFetchDoing,
-  callApiThenFetchTodoListAndDoing,
+  doing: { id, content, memo: savedMemo, deadline },
+  genCallApi,
+  genCallApiThenFetchDoing,
 }) => {
   const [finishDoingModalVisible, setFinishDoingModalVisible] = useState(false);
   const openFinishDoingModal = () => setFinishDoingModalVisible(true);
   const closeFinishDoingModal = () => setFinishDoingModalVisible(false);
 
+  const [memo, setMemo] = useState(savedMemo);
   const [timeoutId, setTimeoutId] = useState(0);
-  const [memo, setMemo] = useState(doing.memo);
-  const updateMemo = (text) => {
-    setMemo(text);
+  const onMemoChange = (newMemo) => {
+    setMemo(newMemo);
 
     if (timeoutId) clearTimeout(timeoutId);
+    setTimeoutId(setTimeout(genSaveMemo(newMemo), 8_000));
+  };
+  const genSaveMemo = (newMemo) => {
+    const updateMemo = genCallApi({
+      path: `/doings/${id}/memos`,
+      method: 'PUT',
+      body: { memo: newMemo },
+    });
 
-    const saveMemoThenFetchDoing = callApiThenFetchDoing(
-      {
-        path: `/doings/${doing.id}/memos`,
-        method: 'PUT',
-        body: { memo: text },
-      },
-      () => {
-        ToastAndroid.show('memo saved', ToastAndroid.SHORT);
+    return () => {
+      if (timeoutId) {
+        clearTimeout(timeoutId);
+        setTimeoutId(0);
       }
-    );
 
-    const latestTimeoutId = setTimeout(saveMemoThenFetchDoing, 8_000);
-    setTimeoutId(latestTimeoutId);
+      updateMemo();
+    };
   };
 
-  const { content, deadline } = doing;
   return (
     <>
       <View style={styles.viewerContainer}>
@@ -57,20 +58,23 @@ const Doing = ({
             style={styles.viewerInputMemo}
             placeholder="memo"
             value={memo}
-            onChangeText={updateMemo}
+            onChangeText={onMemoChange}
             maxLength={200}
             multiline
           />
         </View>
-
-        <Button onPress={openFinishDoingModal} title="finish doing" />
+        {timeoutId ? (
+          <Button onPress={genSaveMemo(memo)} title="save memo" />
+        ) : (
+          <Button onPress={openFinishDoingModal} title="finish doing" />
+        )}
       </View>
 
       {finishDoingModalVisible && (
         <FinishDoingModal
-          callApiThenFetchTodoListAndDoing={callApiThenFetchTodoListAndDoing}
+          genCallApiThenFetchDoing={genCallApiThenFetchDoing}
           onRequestClose={closeFinishDoingModal}
-          doing={doing}
+          id={id}
           memo={memo}
         />
       )}
@@ -79,12 +83,12 @@ const Doing = ({
 };
 
 const FinishDoingModal = ({
-  callApiThenFetchTodoListAndDoing,
+  genCallApiThenFetchDoing,
   onRequestClose,
-  doing: { id },
+  id,
   memo,
 }) => {
-  const finishDoingThenFetchTodoListAndDoing = callApiThenFetchTodoListAndDoing(
+  const finishDoingThenFetchDoing = genCallApiThenFetchDoing(
     {
       path: '/dones',
       method: 'POST',
@@ -103,10 +107,7 @@ const FinishDoingModal = ({
             <Text style={styles.modalTextMemo}>{memo}</Text>
           </ScrollView>
 
-          <Button
-            onPress={finishDoingThenFetchTodoListAndDoing}
-            title="finish doing"
-          />
+          <Button onPress={finishDoingThenFetchDoing} title="finish doing" />
         </View>
       </View>
     </Modal>
