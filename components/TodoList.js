@@ -70,12 +70,14 @@ const StartTodoModal = ({
         <View style={styles.modalForeground}>
           <Text style={styles.modalTitle}>Start Todo</Text>
 
-          <ScrollView style={styles.modalTextContainer}>
-            <Text style={styles.modalTextContent}>{content}</Text>
+          <View style={styles.modalTextContainer}>
+            <ScrollView>
+              <Text style={styles.modalTextContent}>{content}</Text>
+            </ScrollView>
             <Text style={styles.modalTextDeadline}>
               {`by ${deadline.toString()}`}
             </Text>
-          </ScrollView>
+          </View>
 
           <Button onPress={startTodoThenFetchTodoList} title="start todo" />
         </View>
@@ -121,6 +123,7 @@ const styles = StyleSheet.create({
     flex: 1,
     marginTop: 64,
     width: '80%',
+    maxHeight: '75%',
   },
   listItem: {
     borderColor: 'black',
