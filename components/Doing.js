@@ -47,7 +47,9 @@ const Doing = ({
     <>
       <View style={styles.viewerContainer}>
         <View style={styles.viewerTextContainer}>
-          <Text style={styles.viewerTextContent}>{content}</Text>
+          <ScrollView>
+            <Text style={styles.viewerTextContent}>{content}</Text>
+          </ScrollView>
           <Text style={styles.viewerTextDeadline}>
             {`by ${deadline.toString()}`}
           </Text>
@@ -124,9 +126,9 @@ const styles = StyleSheet.create({
     gap: 8,
     borderBottomWidth: 1,
     paddingVertical: 16,
+    maxHeight: 130,
   },
   viewerTextContent: {
-    maxHeight: 100,
     fontSize: 16,
     fontWeight: 'bold',
   },
