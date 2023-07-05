@@ -26,7 +26,9 @@ const TodoList = ({ todoList, callApiThenFetchTodoListAndDoing }) => {
     return (
       <Pressable style={styles.listItem} onPress={watchTodo}>
         <Text style={styles.listItemTextContent}>{content}</Text>
-        <Text style={styles.listItemTextDeadline}>{deadline.toString()}</Text>
+        <Text
+          style={styles.listItemTextDeadline}
+        >{`by ${deadline.toString()}`}</Text>
       </Pressable>
     );
   };
@@ -68,7 +70,9 @@ const StartTodoModal = ({
 
           <ScrollView style={styles.modalTextContainer}>
             <Text style={styles.modalTextContent}>{content}</Text>
-            <Text style={styles.modalTextDeadline}>{deadline}</Text>
+            <Text style={styles.modalTextDeadline}>
+              {`by ${deadline.toString()}`}
+            </Text>
           </ScrollView>
 
           <Button onPress={startTodoThenFetchTodoList} title="start todo" />
