@@ -37,24 +37,27 @@ const AddTodoModal = ({ callApiThenFetchTodoList, onRequestClose }) => {
   };
 
   const [deadline, setDeadline] = useState('');
-  const [deadlineErrMsg, setDeadlineErrMsg] = useState('invalid date format');
+  const [deadlineErrMsg, setDeadlineErrMsg] = useState('');
+  const deadlineLimit = Date.now() + 1_000 * 60 * 60 * 24 * 30;
   const updateDeadline = (text) => {
+    setDeadline(text);
+
+    if (text === '') return setDeadlineErrMsg('');
+
     const timestamp = Date.parse(text);
+    if (timestamp < Date.now()) return setDeadlineErrMsg('cannot be past');
+    if (timestamp > deadlineLimit)
+      return setDeadlineErrMsg('beyond 30 days are not possibe');
+
     timestamp
       ? setDeadlineErrMsg('')
       : setDeadlineErrMsg('invalid date format');
-
-    if (timestamp < Date.now()) setDeadlineErrMsg('cannot be past');
-    if (timestamp > Date.now() + 1_000 * 60 * 60 * 24 * 30)
-      setDeadlineErrMsg('beyond 30 days are not possibe');
-
-    setDeadline(text);
   };
 
-  const dateObj = new Date(deadline);
+  const dateObj = new Date(deadline || deadlineLimit);
   const deadlineString = `
     ${dateObj.getFullYear()}-${dateObj.getMonth() + 1}-${dateObj.getDate()}
-  `;
+  `.trim();
   const addToDoThenFetchTodoList = callApiThenFetchTodoList(
     {
       path: '/todos',
@@ -91,7 +94,7 @@ const AddTodoModal = ({ callApiThenFetchTodoList, onRequestClose }) => {
             <View>
               <View style={styles.deadlineContainer}>
                 <TextInput
-                  placeholder="deadline (yyyy-mm-dd)"
+                  placeholder={`deadline (by default, ${deadlineString})`}
                   value={deadline}
                   onChangeText={updateDeadline}
                   maxLength={10}
