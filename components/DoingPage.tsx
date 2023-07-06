@@ -8,8 +8,8 @@ import {
   StyleSheet,
   ScrollView,
 } from 'react-native';
-import type { GenCallApi } from '../types/api';
-import type { Doing } from '../types/doing';
+import type { GenCallApi } from 'types/api';
+import type { Doing } from 'types/doing';
 
 type DoingPageProps = {
   doing: Doing;

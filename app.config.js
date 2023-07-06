@@ -8,6 +8,7 @@ module.exports = {
         projectId: '896ff724-3702-47b7-9461-c9568d871676',
       },
     },
+    experiments: { tsconfigPaths: true },
     owner: 'whitepiano',
     name: 'A-ToDo',
     slug: 'a-todo',
