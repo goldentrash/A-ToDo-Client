@@ -1,10 +1,16 @@
-import { useState } from 'react';
+import { useState, type ReactNode } from 'react';
 import { StyleSheet, Modal, View, Button, Text, TextInput } from 'react-native';
+import type { GenCallApi } from '../types/api';
 
-export default FloatingButtonLayout = ({
+type FloatingButtonLayoutProps = {
+  children?: ReactNode;
+  genCallApiThenFetchTodoList: GenCallApi;
+};
+
+export const FloatingButtonLayout = ({
   children,
   genCallApiThenFetchTodoList,
-}) => {
+}: FloatingButtonLayoutProps) => {
   const [addTodoModalVisible, setAddTodoModalVisible] = useState(false);
   const openAddTodoModal = () => setAddTodoModalVisible(true);
   const closeAddTodoModal = () => setAddTodoModalVisible(false);
@@ -27,10 +33,18 @@ export default FloatingButtonLayout = ({
   );
 };
 
-const AddTodoModal = ({ genCallApiThenFetchTodoList, onRequestClose }) => {
+type AddTodoModalProps = {
+  genCallApiThenFetchTodoList: GenCallApi;
+  onRequestClose: () => void;
+};
+
+const AddTodoModal = ({
+  genCallApiThenFetchTodoList,
+  onRequestClose,
+}: AddTodoModalProps) => {
   const [content, setContent] = useState('');
   const [contentErrMsg, setContentErrMsg] = useState('content required');
-  const updateContent = (text) => {
+  const updateContent = (text: string) => {
     text ? setContentErrMsg('') : setContentErrMsg('content required');
 
     setContent(text);
@@ -39,7 +53,7 @@ const AddTodoModal = ({ genCallApiThenFetchTodoList, onRequestClose }) => {
   const [deadline, setDeadline] = useState('');
   const [deadlineErrMsg, setDeadlineErrMsg] = useState('');
   const deadlineLimit = Date.now() + 1_000 * 60 * 60 * 24 * 30;
-  const updateDeadline = (text) => {
+  const updateDeadline = (text: string) => {
     setDeadline(text);
 
     if (text === '') return setDeadlineErrMsg('');
@@ -83,7 +97,7 @@ const AddTodoModal = ({ genCallApiThenFetchTodoList, onRequestClose }) => {
                 multiline
                 style={[
                   styles.modalInput,
-                  contentErrMsg && styles.modalInputContainerError,
+                  contentErrMsg !== '' && styles.modalInputContainerError,
                 ]}
               />
               {contentErrMsg && (
@@ -92,18 +106,16 @@ const AddTodoModal = ({ genCallApiThenFetchTodoList, onRequestClose }) => {
             </View>
 
             <View>
-              <View style={styles.deadlineContainer}>
-                <TextInput
-                  placeholder={`deadline (by default, ${deadlineString})`}
-                  value={deadline}
-                  onChangeText={updateDeadline}
-                  maxLength={10}
-                  style={[
-                    styles.modalInput,
-                    deadlineErrMsg && styles.modalInputContainerError,
-                  ]}
-                />
-              </View>
+              <TextInput
+                placeholder={`deadline (by default, ${deadlineString})`}
+                value={deadline}
+                onChangeText={updateDeadline}
+                maxLength={10}
+                style={[
+                  styles.modalInput,
+                  deadlineErrMsg !== '' && styles.modalInputContainerError,
+                ]}
+              />
               {deadlineErrMsg && (
                 <Text style={styles.modalErrorMessage}>{deadlineErrMsg}</Text>
               )}
@@ -166,3 +178,5 @@ const styles = StyleSheet.create({
     right: 42,
   },
 });
+
+export default FloatingButtonLayout;

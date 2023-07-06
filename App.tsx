@@ -7,28 +7,34 @@ import {
 } from 'react-native';
 import { useEffect, useState } from 'react';
 import Constants from 'expo-constants';
-import Doing from './components/Doing';
-import TodoList from './components/TodoList';
+import DoingPage from './components/DoingPage';
+import TodoListPage from './components/TodoListPage';
 import FloatingButtonLayout from './components/FloatingButtonLayout';
+import type { GenCallApi } from './types/api';
+import type { Doing } from './types/doing';
+import type { Todo } from './types/todo';
 
 export default function App() {
   const [loadingCount, setLoadingCount] = useState(0);
-  const genCallApi =
+  const genCallApi: GenCallApi =
     ({ path, method, headers, body }, callback) =>
     () => {
       setLoadingCount((prev) => prev + 1);
 
-      return fetch(Constants.expoConfig.extra.apiServer + path, {
+      if (body)
+        headers = Object.assign(headers ?? {}, {
+          'Content-Type': 'application/json',
+        });
+      return fetch(Constants.expoConfig!.extra!.apiServer + path, {
         method,
         headers: {
           Accept: 'application/json',
-          'Content-Type': body ? 'application/json' : undefined,
           ...headers,
         },
         body: JSON.stringify(body),
       })
         .then((res) => {
-          if (!res.ok) throw new Error(res.status);
+          if (!res.ok) throw new Error(res.status.toString());
           return res.json();
         })
         .then(callback)
@@ -50,7 +56,7 @@ export default function App() {
       if (!data) throw new Error(message);
 
       setTodoList(
-        data.map(({ deadline, ...properties }) => ({
+        data.map(({ deadline, ...properties }: Todo) => ({
           deadline: deadline.slice(0, 10),
           ...properties,
         }))
@@ -65,7 +71,7 @@ export default function App() {
       if (!data) throw new Error(message);
 
       setDoing(
-        data.map(({ deadline, ...properties }) => ({
+        data.map(({ deadline, ...properties }: Doing) => ({
           deadline: deadline.slice(0, 10),
           ...properties,
         }))[0]
@@ -77,21 +83,24 @@ export default function App() {
     Promise.all([fetchTodoList(), fetchDoing()]);
   }, []);
 
-  const genCallApiThenFetchTodoList = (requestArgs, callback) =>
+  const genCallApiThenFetchTodoList: GenCallApi = (requestArgs, callback) =>
     genCallApi(requestArgs, () => {
-      callback();
+      callback?.();
       fetchTodoList();
     });
 
-  const genCallApiThenFetchDoing = (requestArgs, callback) =>
+  const genCallApiThenFetchDoing: GenCallApi = (requestArgs, callback) =>
     genCallApi(requestArgs, () => {
-      callback();
+      callback?.();
       fetchDoing();
     });
 
-  const genCallApiThenFetchTodoListAndDoing = (requestArgs, callback) =>
+  const genCallApiThenFetchTodoListAndDoing: GenCallApi = (
+    requestArgs,
+    callback
+  ) =>
     genCallApi(requestArgs, () => {
-      callback();
+      callback?.();
       Promise.all([fetchTodoList(), fetchDoing()]);
     });
 
@@ -104,13 +113,13 @@ export default function App() {
         genCallApiThenFetchTodoList={genCallApiThenFetchTodoList}
       >
         {doing ? (
-          <Doing
+          <DoingPage
             doing={doing}
             genCallApi={genCallApi}
             genCallApiThenFetchDoing={genCallApiThenFetchDoing}
           />
         ) : (
-          <TodoList
+          <TodoListPage
             todoList={todoList}
             genCallApiThenFetchTodoListAndDoing={
               genCallApiThenFetchTodoListAndDoing
