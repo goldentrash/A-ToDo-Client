@@ -8,25 +8,33 @@ import {
   StyleSheet,
   ScrollView,
 } from 'react-native';
+import type { GenCallApi } from '../types/api';
+import type { Doing } from '../types/doing';
 
-const Doing = ({
+type DoingPageProps = {
+  doing: Doing;
+  genCallApi: GenCallApi;
+  genCallApiThenFetchDoing: GenCallApi;
+};
+
+const DoingPage = ({
   doing: { id, content, memo: savedMemo, deadline },
   genCallApi,
   genCallApiThenFetchDoing,
-}) => {
+}: DoingPageProps) => {
   const [finishDoingModalVisible, setFinishDoingModalVisible] = useState(false);
   const openFinishDoingModal = () => setFinishDoingModalVisible(true);
   const closeFinishDoingModal = () => setFinishDoingModalVisible(false);
 
   const [memo, setMemo] = useState(savedMemo);
-  const [timeoutId, setTimeoutId] = useState(0);
-  const onMemoChange = (newMemo) => {
+  const [timeoutId, setTimeoutId] = useState<0 | NodeJS.Timeout>(0);
+  const onMemoChange = (newMemo: string) => {
     setMemo(newMemo);
 
     if (timeoutId) clearTimeout(timeoutId);
     setTimeoutId(setTimeout(genSaveMemo(newMemo), 8_000));
   };
-  const genSaveMemo = (newMemo) => {
+  const genSaveMemo = (newMemo: string) => {
     const updateMemo = genCallApi({
       path: `/doings/${id}/memos`,
       method: 'PUT',
@@ -84,12 +92,19 @@ const Doing = ({
   );
 };
 
+type FinishDoingModalProps = {
+  genCallApiThenFetchDoing: GenCallApi;
+  onRequestClose: () => void;
+  id: Doing['id'];
+  memo: Doing['memo'];
+};
+
 const FinishDoingModal = ({
   genCallApiThenFetchDoing,
   onRequestClose,
   id,
   memo,
-}) => {
+}: FinishDoingModalProps) => {
   const finishDoingThenFetchDoing = genCallApiThenFetchDoing(
     {
       path: '/dones',
@@ -175,4 +190,4 @@ const styles = StyleSheet.create({
   },
 });
 
-export default Doing;
+export default DoingPage;

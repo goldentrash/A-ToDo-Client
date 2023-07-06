@@ -9,14 +9,24 @@ import {
   ScrollView,
   View,
 } from 'react-native';
+import type { GenCallApi } from '../types/api';
+import type { Todo } from '../types/todo';
 
-const TodoList = ({ todoList, genCallApiThenFetchTodoListAndDoing }) => {
+type TodoListPageProps = {
+  todoList: Todo[];
+  genCallApiThenFetchTodoListAndDoing: GenCallApi;
+};
+
+const TodoListPage = ({
+  todoList,
+  genCallApiThenFetchTodoListAndDoing,
+}: TodoListPageProps) => {
   const [startTodoModalVisible, setStartTodoModalVisible] = useState(false);
   const openStartTodoModal = () => setStartTodoModalVisible(true);
   const closeStartTodoModal = () => setStartTodoModalVisible(false);
 
-  const [watchingTodo, setWatchingTodo] = useState(null);
-  const renderTodo = ({ item: todo }) => {
+  const [watchingTodo, setWatchingTodo] = useState<null | Todo>(null);
+  const renderTodo = ({ item: todo }: { item: Todo }) => {
     const { content, deadline } = todo;
     const watchTodo = () => {
       setWatchingTodo(todo);
@@ -47,18 +57,24 @@ const TodoList = ({ todoList, genCallApiThenFetchTodoListAndDoing }) => {
             genCallApiThenFetchTodoListAndDoing
           }
           onRequestClose={closeStartTodoModal}
-          watchingTodo={watchingTodo}
+          watchingTodo={watchingTodo!}
         />
       )}
     </>
   );
 };
 
+type StartTodoModalProps = {
+  genCallApiThenFetchTodoListAndDoing: GenCallApi;
+  onRequestClose: () => void;
+  watchingTodo: Todo;
+};
+
 const StartTodoModal = ({
   genCallApiThenFetchTodoListAndDoing,
   onRequestClose,
   watchingTodo: { id, content, deadline },
-}) => {
+}: StartTodoModalProps) => {
   const startTodoThenFetchTodoList = genCallApiThenFetchTodoListAndDoing(
     { path: '/doings', method: 'POST', body: { id } },
     onRequestClose
@@ -142,4 +158,4 @@ const styles = StyleSheet.create({
   },
 });
 
-export default TodoList;
+export default TodoListPage;
