@@ -6,11 +6,10 @@ type FloatingButtonLayoutProps = {
   children?: ReactNode;
   genCallApiThenFetchTodoList: GenCallApi;
 };
-
-export const FloatingButtonLayout = ({
+export default function FloatingButtonLayout({
   children,
   genCallApiThenFetchTodoList,
-}: FloatingButtonLayoutProps) => {
+}: FloatingButtonLayoutProps) {
   const [addTodoModalVisible, setAddTodoModalVisible] = useState(false);
   const openAddTodoModal = () => setAddTodoModalVisible(true);
   const closeAddTodoModal = () => setAddTodoModalVisible(false);
@@ -31,17 +30,16 @@ export const FloatingButtonLayout = ({
       )}
     </>
   );
-};
+}
 
 type AddTodoModalProps = {
   genCallApiThenFetchTodoList: GenCallApi;
   onRequestClose: () => void;
 };
-
-const AddTodoModal = ({
+function AddTodoModal({
   genCallApiThenFetchTodoList,
   onRequestClose,
-}: AddTodoModalProps) => {
+}: AddTodoModalProps) {
   const [content, setContent] = useState('');
   const [contentErrMsg, setContentErrMsg] = useState('content required');
   const updateContent = (text: string) => {
@@ -131,7 +129,7 @@ const AddTodoModal = ({
       </View>
     </Modal>
   );
-};
+}
 
 const styles = StyleSheet.create({
   modalBackground: {
@@ -178,5 +176,3 @@ const styles = StyleSheet.create({
     right: 42,
   },
 });
-
-export default FloatingButtonLayout;

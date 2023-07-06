@@ -16,11 +16,10 @@ type TodoListPageProps = {
   todoList: Todo[];
   genCallApiThenFetchTodoListAndDoing: GenCallApi;
 };
-
-const TodoListPage = ({
+export default function TodoListPage({
   todoList,
   genCallApiThenFetchTodoListAndDoing,
-}: TodoListPageProps) => {
+}: TodoListPageProps) {
   const [startTodoModalVisible, setStartTodoModalVisible] = useState(false);
   const openStartTodoModal = () => setStartTodoModalVisible(true);
   const closeStartTodoModal = () => setStartTodoModalVisible(false);
@@ -62,19 +61,18 @@ const TodoListPage = ({
       )}
     </>
   );
-};
+}
 
 type StartTodoModalProps = {
   genCallApiThenFetchTodoListAndDoing: GenCallApi;
   onRequestClose: () => void;
   watchingTodo: Todo;
 };
-
-const StartTodoModal = ({
+function StartTodoModal({
   genCallApiThenFetchTodoListAndDoing,
   onRequestClose,
   watchingTodo: { id, content, deadline },
-}: StartTodoModalProps) => {
+}: StartTodoModalProps) {
   const startTodoThenFetchTodoList = genCallApiThenFetchTodoListAndDoing(
     { path: '/doings', method: 'POST', body: { id } },
     onRequestClose
@@ -100,7 +98,7 @@ const StartTodoModal = ({
       </View>
     </Modal>
   );
-};
+}
 
 const styles = StyleSheet.create({
   modalBackground: {
@@ -157,5 +155,3 @@ const styles = StyleSheet.create({
     textAlign: 'right',
   },
 });
-
-export default TodoListPage;

@@ -16,12 +16,11 @@ type DoingPageProps = {
   genCallApi: GenCallApi;
   genCallApiThenFetchDoing: GenCallApi;
 };
-
-const DoingPage = ({
+export default function DoingPage({
   doing: { id, content, memo: savedMemo, deadline },
   genCallApi,
   genCallApiThenFetchDoing,
-}: DoingPageProps) => {
+}: DoingPageProps) {
   const [finishDoingModalVisible, setFinishDoingModalVisible] = useState(false);
   const openFinishDoingModal = () => setFinishDoingModalVisible(true);
   const closeFinishDoingModal = () => setFinishDoingModalVisible(false);
@@ -90,7 +89,7 @@ const DoingPage = ({
       )}
     </>
   );
-};
+}
 
 type FinishDoingModalProps = {
   genCallApiThenFetchDoing: GenCallApi;
@@ -98,13 +97,12 @@ type FinishDoingModalProps = {
   id: Doing['id'];
   memo: Doing['memo'];
 };
-
-const FinishDoingModal = ({
+function FinishDoingModal({
   genCallApiThenFetchDoing,
   onRequestClose,
   id,
   memo,
-}: FinishDoingModalProps) => {
+}: FinishDoingModalProps) {
   const finishDoingThenFetchDoing = genCallApiThenFetchDoing(
     {
       path: '/dones',
@@ -129,7 +127,7 @@ const FinishDoingModal = ({
       </View>
     </Modal>
   );
-};
+}
 
 const styles = StyleSheet.create({
   viewerContainer: {
@@ -189,5 +187,3 @@ const styles = StyleSheet.create({
     fontSize: 16,
   },
 });
-
-export default DoingPage;
