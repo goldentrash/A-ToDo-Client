@@ -3,6 +3,7 @@
   "include": ["App.tsx", "components/**/*"],
   "compilerOptions": {
     "strict": true,
-    "verbatimModuleSyntax": true
+    "verbatimModuleSyntax": true,
+    "baseUrl": "."
   }
 }
