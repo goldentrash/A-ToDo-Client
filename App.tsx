@@ -21,10 +21,7 @@ export default function App() {
     () => {
       setLoadingCount((prev) => prev + 1);
 
-      if (body)
-        headers = Object.assign(headers ?? {}, {
-          'Content-Type': 'application/json',
-        });
+      if (body) headers = { ...headers, 'Content-Type': 'application/json' };
       return fetch(Constants.expoConfig!.extra!.apiServer + path, {
         method,
         headers: {
