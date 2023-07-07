@@ -34,17 +34,17 @@ export default function DoingPage({
     setTimeoutId(setTimeout(genSaveMemo(newMemo), 8_000));
   };
   const genSaveMemo = (newMemo: string) => {
-    const updateMemo = genCallApi({
-      path: `/doings/${id}/memos`,
-      method: 'PUT',
-      body: { memo: newMemo },
-    });
+    const updateMemo = genCallApi(
+      {
+        path: `/doings/${id}/memos`,
+        method: 'PUT',
+        body: { memo: newMemo },
+      },
+      () => setTimeoutId(0)
+    );
 
     return () => {
-      if (timeoutId) {
-        clearTimeout(timeoutId);
-        setTimeoutId(0);
-      }
+      if (timeoutId) clearTimeout(timeoutId);
 
       updateMemo();
     };
