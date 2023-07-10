@@ -1,0 +1,26 @@
+root: true
+env:
+  react-native/react-native: true
+parser: "@typescript-eslint/parser"
+parserOptions:
+  ecmaVersion: latest
+  sourceType: module
+plugins:
+  - "@typescript-eslint"
+  - react
+  - react-native
+extends:
+  - eslint:recommended
+  - plugin:@typescript-eslint/recommended
+  - plugin:react/recommended
+  - plugin:react-native/all
+  - prettier
+reportUnusedDisableDirectives: true
+rules:
+  "@typescript-eslint/no-unused-vars":
+    - warn
+    - argsIgnorePattern: ^_
+      ignoreRestSiblings: true
+  react/react-in-jsx-scope: off
+  react-native/no-color-literals: off # will be set to error later
+  react-native/split-platform-components: off # A-ToDo only supports Android version
