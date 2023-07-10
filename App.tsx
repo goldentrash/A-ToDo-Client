@@ -1,18 +1,18 @@
-import { StatusBar } from 'expo-status-bar';
+import { StatusBar } from "expo-status-bar";
 import {
   StyleSheet,
   ActivityIndicator,
   View,
   ToastAndroid,
-} from 'react-native';
-import { useEffect, useState } from 'react';
-import Constants from 'expo-constants';
-import DoingPage from 'components/DoingPage';
-import TodoListPage from 'components/TodoListPage';
-import FloatingButtonLayout from 'components/FloatingButtonLayout';
-import type { GenCallApi } from 'types/api';
-import type { Doing } from 'types/doing';
-import type { Todo } from 'types/todo';
+} from "react-native";
+import { useEffect, useState } from "react";
+import Constants from "expo-constants";
+import DoingPage from "components/DoingPage";
+import TodoListPage from "components/TodoListPage";
+import FloatingButtonLayout from "components/FloatingButtonLayout";
+import type { GenCallApi } from "types/api";
+import type { Doing } from "types/doing";
+import type { Todo } from "types/todo";
 
 export default function App() {
   const [loadingCount, setLoadingCount] = useState(0);
@@ -21,11 +21,13 @@ export default function App() {
     () => {
       setLoadingCount((prev) => prev + 1);
 
-      if (body) headers = { ...headers, 'Content-Type': 'application/json' };
+      if (body) headers = { ...headers, "Content-Type": "application/json" };
+
+      // eslint-disable-next-line @typescript-eslint/no-non-null-assertion
       return fetch(Constants.expoConfig!.extra!.apiServer + path, {
         method,
         headers: {
-          Accept: 'application/json',
+          Accept: "application/json",
           ...headers,
         },
         body: JSON.stringify(body),
@@ -35,9 +37,9 @@ export default function App() {
           return res.json();
         })
         .then(callback)
-        .catch((err) => {
+        .catch((_err) => {
           ToastAndroid.show(
-            'fail to fetch, please try again later',
+            "fail to fetch, please try again later",
             ToastAndroid.SHORT
           );
         })
@@ -48,7 +50,7 @@ export default function App() {
 
   const [todoList, setTodoList] = useState([]);
   const fetchTodoList = genCallApi(
-    { path: '/todos', method: 'GET' },
+    { path: "/todos", method: "GET" },
     ({ message, data }) => {
       if (!data) throw new Error(message);
 
@@ -63,7 +65,7 @@ export default function App() {
 
   const [doing, setDoing] = useState(null);
   const fetchDoing = genCallApi(
-    { path: '/doings', method: 'GET' },
+    { path: "/doings", method: "GET" },
     ({ message, data }) => {
       if (!data) throw new Error(message);
 
@@ -104,7 +106,7 @@ export default function App() {
   return (
     <View
       style={styles.container}
-      pointerEvents={loadingCount === 0 ? 'auto' : 'none'}
+      pointerEvents={loadingCount === 0 ? "auto" : "none"}
     >
       <FloatingButtonLayout
         genCallApiThenFetchTodoList={genCallApiThenFetchTodoList}
@@ -137,16 +139,16 @@ export default function App() {
 }
 
 const styles = StyleSheet.create({
-  container: {
-    flex: 1,
-    alignItems: 'center',
-    backgroundColor: '#fff',
-  },
   activityIndicatorContainer: {
-    width: '100%',
-    height: '100%',
-    justifyContent: 'center',
-    position: 'absolute',
-    backgroundColor: '#ecf0f180',
+    backgroundColor: "#ecf0f180",
+    height: "100%",
+    justifyContent: "center",
+    position: "absolute",
+    width: "100%",
+  },
+  container: {
+    alignItems: "center",
+    backgroundColor: "#fff",
+    flex: 1,
   },
 });

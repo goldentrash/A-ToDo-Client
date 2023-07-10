@@ -1,6 +1,6 @@
-import { useState, type ReactNode } from 'react';
-import { StyleSheet, Modal, View, Button, Text, TextInput } from 'react-native';
-import type { GenCallApi } from 'types/api';
+import { useState, type ReactNode } from "react";
+import { StyleSheet, Modal, View, Button, Text, TextInput } from "react-native";
+import type { GenCallApi } from "types/api";
 
 type FloatingButtonLayoutProps = {
   children?: ReactNode;
@@ -40,30 +40,30 @@ function AddTodoModal({
   genCallApiThenFetchTodoList,
   onRequestClose,
 }: AddTodoModalProps) {
-  const [content, setContent] = useState('');
-  const [contentErrMsg, setContentErrMsg] = useState('content required');
+  const [content, setContent] = useState("");
+  const [contentErrMsg, setContentErrMsg] = useState("content required");
   const updateContent = (text: string) => {
-    text ? setContentErrMsg('') : setContentErrMsg('content required');
+    text ? setContentErrMsg("") : setContentErrMsg("content required");
 
     setContent(text);
   };
 
-  const [deadline, setDeadline] = useState('');
-  const [deadlineErrMsg, setDeadlineErrMsg] = useState('');
+  const [deadline, setDeadline] = useState("");
+  const [deadlineErrMsg, setDeadlineErrMsg] = useState("");
   const deadlineLimit = Date.now() + 1_000 * 60 * 60 * 24 * 30;
   const updateDeadline = (text: string) => {
     setDeadline(text);
 
-    if (text === '') return setDeadlineErrMsg('');
+    if (text === "") return setDeadlineErrMsg("");
 
     const timestamp = Date.parse(text);
-    if (timestamp < Date.now()) return setDeadlineErrMsg('cannot be past');
+    if (timestamp < Date.now()) return setDeadlineErrMsg("cannot be past");
     if (timestamp > deadlineLimit)
-      return setDeadlineErrMsg('beyond 30 days are not possibe');
+      return setDeadlineErrMsg("beyond 30 days are not possibe");
 
     timestamp
-      ? setDeadlineErrMsg('')
-      : setDeadlineErrMsg('invalid date format');
+      ? setDeadlineErrMsg("")
+      : setDeadlineErrMsg("invalid date format");
   };
 
   const dateObj = new Date(deadline || deadlineLimit);
@@ -72,8 +72,8 @@ function AddTodoModal({
   `.trim();
   const addToDoThenFetchTodoList = genCallApiThenFetchTodoList(
     {
-      path: '/todos',
-      method: 'POST',
+      path: "/todos",
+      method: "POST",
       body: { content, deadline: deadlineString },
     },
     onRequestClose
@@ -95,7 +95,7 @@ function AddTodoModal({
                 multiline
                 style={[
                   styles.modalInput,
-                  contentErrMsg !== '' && styles.modalInputContainerError,
+                  contentErrMsg !== "" && styles.modalInputContainerError,
                 ]}
               />
               {contentErrMsg && (
@@ -111,7 +111,7 @@ function AddTodoModal({
                 maxLength={10}
                 style={[
                   styles.modalInput,
-                  deadlineErrMsg !== '' && styles.modalInputContainerError,
+                  deadlineErrMsg !== "" && styles.modalInputContainerError,
                 ]}
               />
               {deadlineErrMsg && (
@@ -123,7 +123,7 @@ function AddTodoModal({
           <Button
             onPress={addToDoThenFetchTodoList}
             title="add todo"
-            disabled={contentErrMsg !== '' || deadlineErrMsg !== ''}
+            disabled={contentErrMsg !== "" || deadlineErrMsg !== ""}
           />
         </View>
       </View>
@@ -132,47 +132,47 @@ function AddTodoModal({
 }
 
 const styles = StyleSheet.create({
+  floatingButtonContainer: {
+    bottom: 60,
+    position: "absolute",
+    right: 42,
+  },
   modalBackground: {
+    alignItems: "center",
+    backgroundColor: "#ecf0f180",
     flex: 1,
-    justifyContent: 'center',
-    alignItems: 'center',
-    backgroundColor: '#ecf0f180',
+    justifyContent: "center",
+  },
+  modalErrorMessage: {
+    color: "#ff0000",
+    fontSize: 12,
   },
   modalForeground: {
-    backgroundColor: '#ffffff',
-    width: '80%',
-    height: 380,
-    gap: 12,
-    padding: 32,
+    backgroundColor: "#ffffff",
     borderRadius: 8,
     borderWidth: 1,
+    gap: 12,
+    height: 380,
+    padding: 32,
+    width: "80%",
   },
-  modalTitle: {
-    fontSize: 18,
-    fontWeight: 'bold',
+  modalInput: {
+    borderRadius: 4,
+    borderWidth: 1,
+    maxHeight: 100,
+    padding: 6,
   },
   modalInputContainer: {
-    gap: 8,
     borderTopWidth: 1,
+    gap: 8,
     height: 220,
     paddingVertical: 16,
   },
   modalInputContainerError: {
-    borderColor: '#ff0000',
+    borderColor: "#ff0000",
   },
-  modalErrorMessage: {
-    fontSize: 12,
-    color: '#ff0000',
-  },
-  modalInput: {
-    padding: 6,
-    borderWidth: 1,
-    borderRadius: 4,
-    maxHeight: 100,
-  },
-  floatingButtonContainer: {
-    position: 'absolute',
-    bottom: 60,
-    right: 42,
+  modalTitle: {
+    fontSize: 18,
+    fontWeight: "bold",
   },
 });

@@ -1,4 +1,4 @@
-import { useState } from 'react';
+import { useState } from "react";
 import {
   Button,
   Modal,
@@ -7,9 +7,9 @@ import {
   TextInput,
   StyleSheet,
   ScrollView,
-} from 'react-native';
-import type { GenCallApi } from 'types/api';
-import type { Doing } from 'types/doing';
+} from "react-native";
+import type { GenCallApi } from "types/api";
+import type { Doing } from "types/doing";
 
 type DoingPageProps = {
   doing: Doing;
@@ -37,7 +37,7 @@ export default function DoingPage({
     const updateMemo = genCallApi(
       {
         path: `/doings/${id}/memos`,
-        method: 'PUT',
+        method: "PUT",
         body: { memo: newMemo },
       },
       () => setTimeoutId(0)
@@ -94,8 +94,8 @@ export default function DoingPage({
 type FinishDoingModalProps = {
   genCallApiThenFetchDoing: GenCallApi;
   onRequestClose: () => void;
-  id: Doing['id'];
-  memo: Doing['memo'];
+  id: Doing["id"];
+  memo: Doing["memo"];
 };
 function FinishDoingModal({
   genCallApiThenFetchDoing,
@@ -105,8 +105,8 @@ function FinishDoingModal({
 }: FinishDoingModalProps) {
   const finishDoingThenFetchDoing = genCallApiThenFetchDoing(
     {
-      path: '/dones',
-      method: 'POST',
+      path: "/dones",
+      method: "POST",
       body: { id },
     },
     onRequestClose
@@ -130,60 +130,60 @@ function FinishDoingModal({
 }
 
 const styles = StyleSheet.create({
-  viewerContainer: {
-    flex: 1,
-    marginTop: 64,
-    width: '80%',
-  },
-  viewerTextContainer: {
-    gap: 8,
-    borderBottomWidth: 1,
-    paddingVertical: 16,
-    maxHeight: 130,
-  },
-  viewerTextContent: {
-    fontSize: 16,
-    fontWeight: 'bold',
-  },
-  viewerTextDeadline: {
-    fontSize: 12,
-    textAlign: 'right',
-  },
-  viewerInputContainer: {
-    paddingVertical: 16,
-    height: '50%',
-  },
-  viewerInputMemo: {
-    padding: 6,
-    borderWidth: 1,
-    borderRadius: 4,
-  },
   modalBackground: {
+    alignItems: "center",
+    backgroundColor: "#ecf0f180",
     flex: 1,
-    justifyContent: 'center',
-    alignItems: 'center',
-    backgroundColor: '#ecf0f180',
+    justifyContent: "center",
   },
   modalForeground: {
-    backgroundColor: '#ffffff',
-    width: '80%',
-    height: 380,
-    gap: 12,
-    padding: 32,
+    backgroundColor: "#ffffff",
     borderRadius: 8,
     borderWidth: 1,
-  },
-  modalTitle: {
-    fontSize: 18,
-    fontWeight: 'bold',
+    gap: 12,
+    height: 380,
+    padding: 32,
+    width: "80%",
   },
   modalTextContainer: {
-    gap: 8,
     borderTopWidth: 1,
+    gap: 8,
     height: 220,
     paddingVertical: 16,
   },
   modalTextMemo: {
     fontSize: 16,
+  },
+  modalTitle: {
+    fontSize: 18,
+    fontWeight: "bold",
+  },
+  viewerContainer: {
+    flex: 1,
+    marginTop: 64,
+    width: "80%",
+  },
+  viewerInputContainer: {
+    height: "50%",
+    paddingVertical: 16,
+  },
+  viewerInputMemo: {
+    borderRadius: 4,
+    borderWidth: 1,
+    padding: 6,
+  },
+  viewerTextContainer: {
+    borderBottomWidth: 1,
+    gap: 8,
+    maxHeight: 130,
+    paddingVertical: 16,
+  },
+  viewerTextContent: {
+    fontSize: 16,
+    fontWeight: "bold",
+  },
+  viewerTextDeadline: {
+    fontSize: 12,
+    textAlign: "right",
   },
 });
