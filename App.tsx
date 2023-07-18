@@ -7,12 +7,12 @@ import {
 } from "react-native";
 import { useEffect, useState } from "react";
 import Constants from "expo-constants";
-import DoingPage from "components/DoingPage";
-import TodoListPage from "components/TodoListPage";
-import FloatingButtonLayout from "components/FloatingButtonLayout";
-import type { GenCallApi } from "types/api";
-import type { Doing } from "types/doing";
-import type { Todo } from "types/todo";
+import DoingPage from "./components/DoingPage";
+import TodoListPage from "./components/TodoListPage";
+import FloatingButtonLayout from "./components/FloatingButtonLayout";
+import type { GenCallApi } from "./types/api";
+import type { Doing } from "./types/doing";
+import type { Todo } from "./types/todo";
 
 export default function App() {
   const [loadingCount, setLoadingCount] = useState(0);

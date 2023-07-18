@@ -9,8 +9,8 @@ import {
   ScrollView,
   View,
 } from "react-native";
-import type { GenCallApi } from "types/api";
-import type { Todo } from "types/todo";
+import type { GenCallApi } from "../types/api";
+import type { Todo } from "../types/todo";
 
 type TodoListPageProps = {
   todoList: Todo[];

@@ -1,9 +1,9 @@
 {
   "extends": "expo/tsconfig.base",
-  "include": ["App.tsx", "components/**/*"],
+  "include": ["App.tsx", "components/**/*", "types/**/*"],
   "compilerOptions": {
     "strict": true,
-    "verbatimModuleSyntax": true,
+    "importsNotUsedAsValues": "error",
     "baseUrl": "."
   }
 }

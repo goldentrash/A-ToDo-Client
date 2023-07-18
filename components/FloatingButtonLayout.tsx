@@ -1,6 +1,6 @@
 import { useState, type ReactNode } from "react";
 import { StyleSheet, Modal, View, Button, Text, TextInput } from "react-native";
-import type { GenCallApi } from "types/api";
+import type { GenCallApi } from "../types/api";
 
 type FloatingButtonLayoutProps = {
   children?: ReactNode;
