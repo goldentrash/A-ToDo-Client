@@ -11,7 +11,10 @@
   "scripts": {
     "prepare": "husky install",
     "start": "expo start",
-    "build": "eas build --platform android --profile preview"
+    "test": "echo test",
+    "typecheck": "tsc",
+    "prebuild": "yarn typecheck && yarn test",
+    "build": "eas build --platform android --profile preview --non-interactive"
   },
   "dependencies": {
     "expo-status-bar": "~1.6.0",
