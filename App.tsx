@@ -127,13 +127,13 @@ export default function App() {
         )}
       </FloatingButtonLayout>
 
-      <StatusBar style="auto" />
-
-      {loadingCount !== 0 && (
+      {loadingCount > 0 && (
         <View style={styles.activityIndicatorContainer}>
           <ActivityIndicator />
         </View>
       )}
+
+      <StatusBar style="dark" />
     </View>
   );
 }
