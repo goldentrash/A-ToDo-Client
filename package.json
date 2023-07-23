@@ -14,11 +14,12 @@
     "test": "echo test",
     "typecheck": "tsc",
     "prebuild": "yarn typecheck && yarn test",
-    "build": "eas build --platform android --profile preview --non-interactive"
+    "build": "eas build --platform android --profile preview --non-interactive --no-wait"
   },
   "dependencies": {
     "expo-status-bar": "~1.4.4",
     "react": "18.2.0",
+    "react-error-boundary": "^4.0.10",
     "react-native": "0.71.8"
   },
   "devDependencies": {
@@ -26,10 +27,12 @@
     "@types/react": "~18.0.27",
     "@typescript-eslint/eslint-plugin": "^5.61.0",
     "@typescript-eslint/parser": "^5.61.0",
+    "dotenv": "^16.3.1",
     "eas-cli": "^3.14.0",
     "eslint": "^8.44.0",
     "eslint-config-prettier": "^8.8.0",
     "eslint-plugin-react": "^7.32.2",
+    "eslint-plugin-react-hooks": "^4.6.0",
     "eslint-plugin-react-native": "^4.0.0",
     "expo": "^48.0.18",
     "husky": "^8.0.3",
