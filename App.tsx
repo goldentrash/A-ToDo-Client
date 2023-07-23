@@ -1,140 +1,58 @@
+import { useState, useMemo } from "react";
+import { StyleSheet, ActivityIndicator, View } from "react-native";
+import { ErrorBoundary } from "react-error-boundary";
 import { StatusBar } from "expo-status-bar";
-import {
-  StyleSheet,
-  ActivityIndicator,
-  View,
-  ToastAndroid,
-} from "react-native";
-import { useEffect, useState } from "react";
-import Constants from "expo-constants";
-import DoingPage from "./components/DoingPage";
-import TodoListPage from "./components/TodoListPage";
-import FloatingButtonLayout from "./components/FloatingButtonLayout";
-import type { GenCallApi } from "./types/api";
-import type { Doing } from "./types/doing";
-import type { Todo } from "./types/todo";
+import { LoadingContext, UserContext } from "src/contexts";
+import type { User } from "src/contexts";
+import { DoingPage, TodoListPage } from "src/containers";
+import { Fallback } from "src/components/Fallback";
 
 export default function App() {
   const [loadingCount, setLoadingCount] = useState(0);
-  const genCallApi: GenCallApi =
-    ({ path, method, headers, body }, callback) =>
-    () => {
-      setLoadingCount((prev) => prev + 1);
-
-      if (body) headers = { ...headers, "Content-Type": "application/json" };
-
-      // eslint-disable-next-line @typescript-eslint/no-non-null-assertion
-      return fetch(Constants.expoConfig!.extra!.apiServer + path, {
-        method,
-        headers: {
-          Accept: "application/json",
-          ...headers,
-        },
-        body: JSON.stringify(body),
-      })
-        .then((res) => {
-          if (!res.ok) throw new Error(res.status.toString());
-          return res.json();
-        })
-        .then(callback)
-        .catch((_err) => {
-          ToastAndroid.show(
-            "fail to fetch, please try again later",
-            ToastAndroid.SHORT
-          );
-        })
-        .finally(() => {
-          setLoadingCount((prev) => prev - 1);
-        });
-    };
-
-  const [todoList, setTodoList] = useState([]);
-  const fetchTodoList = genCallApi(
-    { path: "/todos", method: "GET" },
-    ({ message, data }) => {
-      if (!data) throw new Error(message);
-
-      setTodoList(
-        data.map(({ deadline, ...properties }: Todo) => ({
-          deadline: deadline.slice(0, 10),
-          ...properties,
-        }))
-      );
-    }
+  const loadingContextValue = useMemo(
+    () => ({
+      loadingCount,
+      setLoadingCount,
+    }),
+    [loadingCount, setLoadingCount]
   );
+  const isLoading = useMemo(() => loadingCount > 0, [loadingCount]);
 
-  const [doing, setDoing] = useState(null);
-  const fetchDoing = genCallApi(
-    { path: "/doings", method: "GET" },
-    ({ message, data }) => {
-      if (!data) throw new Error(message);
-
-      setDoing(
-        data.map(({ deadline, ...properties }: Doing) => ({
-          deadline: deadline.slice(0, 10),
-          ...properties,
-        }))[0]
-      );
-    }
-  );
-
-  useEffect(() => {
-    Promise.all([fetchTodoList(), fetchDoing()]);
-  }, []);
-
-  const genCallApiThenFetchTodoList: GenCallApi = (requestArgs, callback) =>
-    genCallApi(requestArgs, () => {
-      callback?.();
-      fetchTodoList();
-    });
-
-  const genCallApiThenFetchDoing: GenCallApi = (requestArgs, callback) =>
-    genCallApi(requestArgs, () => {
-      callback?.();
-      fetchDoing();
-    });
-
-  const genCallApiThenFetchTodoListAndDoing: GenCallApi = (
-    requestArgs,
-    callback
-  ) =>
-    genCallApi(requestArgs, () => {
-      callback?.();
-      Promise.all([fetchTodoList(), fetchDoing()]);
-    });
+  const [user, setUser] = useState<User | null>(null);
+  const userContextValue = useMemo(() => ({ user, setUser }), [user, setUser]);
 
   return (
-    <View
-      style={styles.container}
-      pointerEvents={loadingCount === 0 ? "auto" : "none"}
-    >
-      <FloatingButtonLayout
-        genCallApiThenFetchTodoList={genCallApiThenFetchTodoList}
-      >
-        {doing ? (
-          <DoingPage
-            doing={doing}
-            genCallApi={genCallApi}
-            genCallApiThenFetchDoing={genCallApiThenFetchDoing}
-          />
-        ) : (
-          <TodoListPage
-            todoList={todoList}
-            genCallApiThenFetchTodoListAndDoing={
-              genCallApiThenFetchTodoListAndDoing
-            }
-          />
-        )}
-      </FloatingButtonLayout>
+    <ErrorBoundary FallbackComponent={Fallback}>
+      <LoadingContext.Provider value={loadingContextValue}>
+        <UserContext.Provider value={userContextValue}>
+          <View
+            style={styles.container}
+            pointerEvents={isLoading ? "none" : "auto"}
+          >
+            {(() => {
+              if (!user) return <View />; // auth
 
-      {loadingCount > 0 && (
-        <View style={styles.activityIndicatorContainer}>
-          <ActivityIndicator />
-        </View>
-      )}
+              switch (user.state) {
+                case "rest":
+                  return <TodoListPage />;
+                case "working":
+                  return <DoingPage />;
+                default:
+                  throw Error("something went wrong");
+              }
+            })()}
 
-      <StatusBar style="dark" />
-    </View>
+            {isLoading && (
+              <View style={styles.activityIndicatorContainer}>
+                <ActivityIndicator />
+              </View>
+            )}
+
+            <StatusBar style="dark" />
+          </View>
+        </UserContext.Provider>
+      </LoadingContext.Provider>
+    </ErrorBoundary>
   );
 }
 
