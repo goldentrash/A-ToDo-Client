@@ -11,9 +11,8 @@
   "scripts": {
     "prepare": "husky install",
     "start": "expo start",
-    "test": "echo test",
-    "typecheck": "tsc",
-    "prebuild": "yarn typecheck && yarn test",
+    "check:type": "tsc",
+    "prebuild": "yarn check:type",
     "build": "eas build --platform android --profile preview --non-interactive --no-wait"
   },
   "dependencies": {
