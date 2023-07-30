@@ -38,7 +38,9 @@ export default function App() {
                 case "working":
                   return <DoingPage />;
                 default:
-                  throw Error("something went wrong");
+                  return ((_: never): never => {
+                    throw Error("something went wrong");
+                  })(user);
               }
             })()}
 
