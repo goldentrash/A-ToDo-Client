@@ -3,8 +3,6 @@
   "include": ["src/**/*", "App.tsx"],
   "compilerOptions": {
     "strict": true,
-    "ignoreDeprecations": "5.0",
-    "importsNotUsedAsValues": "error",
-    "baseUrl": "."
+    "importsNotUsedAsValues": "remove"
   }
 }

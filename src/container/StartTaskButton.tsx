@@ -6,10 +6,10 @@ type FloatingButtonLayoutProps = {
   children?: ReactNode;
   genCallApiThenFetchTodoList: GenCallApi;
 };
-export default function FloatingButtonLayout({
+export const FloatingButtonLayout = ({
   children,
   genCallApiThenFetchTodoList,
-}: FloatingButtonLayoutProps) {
+}: FloatingButtonLayoutProps) => {
   const [addTodoModalVisible, setAddTodoModalVisible] = useState(false);
   const openAddTodoModal = () => setAddTodoModalVisible(true);
   const closeAddTodoModal = () => setAddTodoModalVisible(false);
@@ -30,7 +30,7 @@ export default function FloatingButtonLayout({
       )}
     </>
   );
-}
+};
 
 type AddTodoModalProps = {
   genCallApiThenFetchTodoList: GenCallApi;

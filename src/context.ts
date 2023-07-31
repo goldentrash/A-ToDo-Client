@@ -6,7 +6,7 @@ export const LoadingContext = createContext<{
 }>({
   loadingCount: 0,
   setLoadingCount() {
-    throw Error("LoadingContext not found");
+    throw Error("LoadingContext Not Found");
   },
 });
 
@@ -22,7 +22,7 @@ export type Doing = Todo & {
 
 export type User = {
   id: string;
-  token: string; // check needed. what type jwt?
+  token: string;
   todoList: Todo[];
 } & (
   | {
@@ -37,6 +37,6 @@ export const UserContext = createContext<{
 }>({
   user: null,
   setUser() {
-    throw Error("UserContext not found");
+    throw Error("UserContext Not Found");
   },
 });

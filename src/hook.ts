@@ -1,16 +1,17 @@
-import { useContext, useCallback, useRef, useEffect } from "react";
+import { useContext, useCallback, useRef } from "react";
 import Constants from "expo-constants";
-import { LoadingContext } from "./contexts";
+import { LoadingContext } from "./context";
 
-type RequestOption = {
-  method: "GET" | "POST" | "PUT";
+export type RequestOption = {
+  method: "GET" | "POST" | "PUT" | "PATCH";
   path: string;
   headers?: { [key: string]: string };
   body?: { [key: string]: string };
 };
-type RequestApi = () => Promise<void>;
-type RseponseHandler = (response: unknown) => void;
-type ErrorHandler = (error: Error) => void;
+export type RequestApi = () => Promise<void>;
+// eslint-disable-next-line @typescript-eslint/no-explicit-any
+export type RseponseHandler = (response: { [key: string]: any }) => void;
+export type ErrorHandler = (error: Error) => void;
 
 export const useApi = (
   requestOption: RequestOption,
@@ -31,7 +32,7 @@ export const useApi = (
     setLoadingCount((prev) => prev + 1);
 
     if (!Constants.expoConfig || !Constants.expoConfig.extra)
-      throw Error("API server not set up");
+      throw Error("API Server Invalid");
     const { path, method, headers, body } = requestOptionRef.current;
 
     return fetch(Constants.expoConfig.extra.apiServer + path, {
@@ -43,9 +44,10 @@ export const useApi = (
       },
       body: JSON.stringify(body),
     })
+      .then((res) => res.json())
       .then((res) => {
-        if (!res.ok) throw new Error(res.status.toString());
-        return res.json();
+        if (res.error) throw Error(res.error);
+        return res.data;
       })
       .then(responseHandlerRef.current)
       .catch(errorHandlerRef.current)
@@ -55,23 +57,4 @@ export const useApi = (
   }, [setLoadingCount]);
 
   return requestApi;
-};
-
-export const useUpdateEffect = (
-  effect: () => void,
-  dependencies?: React.DependencyList | undefined
-) => {
-  const isInitialMountRef = useRef(true);
-
-  const effectRef = useRef(effect);
-  effectRef.current = effect;
-
-  const dependenciesRef = useRef(dependencies);
-  dependenciesRef.current = dependencies;
-
-  useEffect(() => {
-    if (isInitialMountRef.current) isInitialMountRef.current = false;
-    else effectRef.current();
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, dependenciesRef.current);
 };
