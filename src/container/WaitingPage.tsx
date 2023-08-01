@@ -46,10 +46,11 @@ export const WaitingPage = () => {
   );
   const startTaskResHandler = useCallback<RseponseHandler>(
     ({ task }) => {
+      user.todoList.splice(selectedTaskIndex, 1);
       setUser({
         ...user,
         state: "working",
-        todoList: user.todoList.splice(selectedTaskIndex, 1),
+        todoList: [...user.todoList],
         doing: task,
       });
       closeModal();

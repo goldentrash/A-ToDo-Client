@@ -9,4 +9,6 @@ export { FloatingButton, type FloatingButtonProps } from "./FloatingButton";
 export { StartTaskModal, type StartTaskModalProps } from "./StartTaskModal";
 export { TodoListItem, type TodoListItemProps } from "./TodoListItem";
 export { TodoList, type TodoListProps } from "./TodoList";
+export { FinishTaskModal, type FinishTaskModalProps } from "./FinishTaskModal";
+export { Working, type WorkingProps } from "./Working";
 export { Root } from "./Root";
