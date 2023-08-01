@@ -6,4 +6,7 @@ export {
   type RegisterTaskModalProps,
 } from "./RegisterTaskModal";
 export { FloatingButton, type FloatingButtonProps } from "./FloatingButton";
+export { StartTaskModal, type StartTaskModalProps } from "./StartTaskModal";
+export { TodoListItem, type TodoListItemProps } from "./TodoListItem";
+export { TodoList, type TodoListProps } from "./TodoList";
 export { Root } from "./Root";
