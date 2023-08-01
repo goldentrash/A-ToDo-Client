@@ -42,7 +42,7 @@ export const AuthPage = () => {
     [id, password]
   );
   const signInResHandler = useCallback<RseponseHandler>(
-    ({ token }) => setUser({ id, state: "rest", token, todoList: [] }), // setUser로 진입하면 나오지 않는다 원인이 뭘까?
+    ({ token }) => setUser({ id, state: "rest", token, todoList: [] }),
     [id, setUser]
   );
   const signInErrHandler = useCallback<ErrorHandler>((err) => {
@@ -71,10 +71,9 @@ export const AuthPage = () => {
     }),
     [id, password]
   );
-  const signUpResHandler = useCallback<RseponseHandler>(
-    (_res) => closeModal(),
-    [closeModal]
-  );
+  const signUpResHandler = useCallback<RseponseHandler>(closeModal, [
+    closeModal,
+  ]);
   const signUpErrHandler = useCallback<ErrorHandler>((err) => {
     if (err.message === "User ID Duplicated")
       return setIdErrMsg("Duplicated User ID");
