@@ -4,7 +4,10 @@
   },
   "build": {
     "preview": {
-      "env": { "API_SERVER": "http://whitepiano-codeserver.pe.kr" },
+      "env": {
+        "API_SERVER": "http://whitepiano-codeserver.pe.kr",
+        "NODE_ENV": "production"
+      },
       "distribution": "internal",
       "android": {
         "buildType": "apk"
