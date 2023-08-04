@@ -3,11 +3,11 @@
     "version": ">= 3.14.0"
   },
   "build": {
-    "development": {
-      "developmentClient": true,
-      "distribution": "internal"
-    },
     "preview": {
+      "env": {
+        "API_SERVER": "http://whitepiano-codeserver.pe.kr",
+        "NODE_ENV": "production"
+      },
       "distribution": "internal",
       "android": {
         "buildType": "apk"
