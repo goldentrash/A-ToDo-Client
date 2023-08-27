@@ -47,7 +47,7 @@ export const UserMenu = () => {
 
   const getTasksOpt = useMemo<RequestOption>(
     () => ({
-      path: `/tasks`,
+      path: `/tasks?sort=deadline&progress=todo&progress=doing`,
       method: "GET",
       headers: { Authorization: `Bearer ${user.token}` },
     }),
