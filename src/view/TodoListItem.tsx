@@ -1,8 +1,8 @@
 import { Pressable, Text, StyleSheet } from "react-native";
-import { type Todo } from "../context";
+import { type Task } from "../context";
 
 export type TodoListItemProps = {
-  todo: Todo;
+  todo: Task;
   onClick: () => void;
 };
 export const TodoListItem = ({

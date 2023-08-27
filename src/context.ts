@@ -10,26 +10,19 @@ export const LoadingContext = createContext<{
   },
 });
 
-export type Todo = {
+export type Task = {
   id: string;
+  progress: "todo" | "doing";
   content: string;
   deadline: string;
-};
-
-export type Doing = Todo & {
   memo: string;
 };
 
 export type User = {
   id: string;
   token: string;
-  todoList: Todo[];
-} & (
-  | {
-      state: "rest";
-    }
-  | { state: "working"; doing: Doing }
-);
+  todoList: Task[];
+} & ({ state: "rest"; doing: null } | { state: "working"; doing: Task });
 
 export const UserContext = createContext<{
   user: User | null;

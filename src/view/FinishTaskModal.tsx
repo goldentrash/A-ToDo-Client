@@ -6,13 +6,13 @@ import {
   StyleSheet,
   ScrollView,
 } from "react-native";
-import { type Doing } from "../context";
+import { type Task } from "../context";
 
 export type FinishTaskModalProps = {
   visible: boolean;
   onSubmit: () => void;
   onCancel: () => void;
-  doing: Doing;
+  doing: Task;
 };
 export const FinishTaskModal = ({
   visible,

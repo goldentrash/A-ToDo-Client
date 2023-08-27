@@ -6,13 +6,13 @@ import {
   ScrollView,
   View,
 } from "react-native";
-import { type Todo } from "../context";
+import { type Task } from "../context";
 
 export type StartTaskModalProps = {
   visible: boolean;
   onSubmit: () => void;
   onCancel: () => void;
-  todo: Todo | null;
+  todo: Task | null;
 };
 export const StartTaskModal = ({
   visible,

@@ -42,7 +42,8 @@ export const AuthPage = () => {
     [id, password]
   );
   const signInResHandler = useCallback<RseponseHandler>(
-    ({ token }) => setUser({ id, state: "rest", token, todoList: [] }),
+    ({ token }) =>
+      setUser({ id, state: "rest", token, todoList: [], doing: null }),
     [id, setUser]
   );
   const signInErrHandler = useCallback<ErrorHandler>((err) => {
