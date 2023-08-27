@@ -5,11 +5,11 @@ import {
   StyleSheet,
   View,
 } from "react-native";
-import { type Todo } from "../context";
+import { type Task } from "../context";
 
 export type TodoListProps = {
-  todoList: Todo[];
-  renderItem: ListRenderItem<Todo>;
+  todoList: Task[];
+  renderItem: ListRenderItem<Task>;
 };
 export const TodoList = ({ todoList, renderItem }: TodoListProps) => {
   return (

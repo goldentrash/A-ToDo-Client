@@ -7,14 +7,14 @@ import {
   StyleSheet,
   ScrollView,
 } from "react-native";
-import { type Doing } from "../context";
+import { type Task } from "../context";
 
 export type WorkingProps = {
   submitTitle: string;
   onSubmit: () => void;
-  doing: Doing;
-  memo: Doing["memo"];
-  onUpdateMemo: React.Dispatch<React.SetStateAction<Doing["memo"]>>;
+  doing: Task;
+  memo: Task["memo"];
+  onUpdateMemo: React.Dispatch<React.SetStateAction<Task["memo"]>>;
   memoInputRef: RefObject<TextInput>;
 };
 export const Working = ({

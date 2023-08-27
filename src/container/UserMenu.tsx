@@ -1,6 +1,6 @@
 import { useState, useCallback, useContext, useMemo, useEffect } from "react";
 import { ToastAndroid } from "react-native";
-import { UserContext } from "../context";
+import { UserContext, type Task, type User } from "../context";
 import {
   useApi,
   type RequestOption,
@@ -54,14 +54,37 @@ export const UserMenu = () => {
     [user]
   );
   const getTasksResHandler = useCallback<RseponseHandler>(
-    ({ todoList, doing, doneList }) =>
+    ({ taskList }) => {
+      const [todoList, doing] = (taskList as Task[]).reduce<
+        [Task[], Task | null]
+      >(
+        ([todoList, doing], task) => {
+          const { progress } = task;
+          switch (progress) {
+            case "todo":
+              todoList = [...todoList, task];
+              break;
+            case "doing":
+              doing = task;
+              break;
+            default:
+              ((_progress: never) => {
+                throw Error("unreachable case");
+              })(progress);
+          }
+
+          return [todoList, doing];
+        },
+        [[], null]
+      );
+
       setUser({
         ...user,
         state: doing ? "working" : "rest",
         todoList,
-        ...(doing && { doing }),
-        doneList,
-      }),
+        doing,
+      } as User);
+    },
     [user, setUser]
   );
   const getTasksErrHandler = useCallback<ErrorHandler>(
