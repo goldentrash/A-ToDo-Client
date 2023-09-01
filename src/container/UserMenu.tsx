@@ -14,13 +14,13 @@ import { WaitingPage, WorkingPage } from "../container";
 export const UserMenu = () => {
   const [content, setContent] = useState("");
   const [deadline, setDeadline] = useState("");
-  const deadlineLimit = useMemo(
+  const deadlineLimitTimestamp = useMemo(
     () => Date.now() + 1_000 * 60 * 60 * 24 * 30,
     []
   );
-  const defaultDeadline = useMemo(
-    () => formatTimestamp(deadlineLimit),
-    [deadlineLimit]
+  const deadlineLimitString = useMemo(
+    () => formatTimestamp(deadlineLimitTimestamp),
+    [deadlineLimitTimestamp]
   );
 
   const [contentErrMsg, setContentErrMsg] = useState("");
@@ -110,9 +110,14 @@ export const UserMenu = () => {
       path: `/tasks`,
       method: "POST",
       headers: { Authorization: `Bearer ${user?.token}` },
-      body: { content, deadline: deadline === "" ? defaultDeadline : deadline },
+      body: {
+        content,
+        deadline: formatTimestamp(
+          Date.parse(deadline) || deadlineLimitTimestamp
+        ),
+      },
     }),
-    [user, content, deadline, defaultDeadline]
+    [user, content, deadline, deadlineLimitTimestamp]
   );
   const registerTaskResHandler = useCallback<RseponseHandler>(
     ({ task }) => {
@@ -149,15 +154,16 @@ export const UserMenu = () => {
 
     if (!content) return setContentErrMsg("content Required");
 
-    const timestamp = deadline === "" ? deadlineLimit : Date.parse(deadline);
+    const timestamp =
+      deadline === "" ? deadlineLimitTimestamp : Date.parse(deadline);
     if (!timestamp) return setDeadlineErrMsg("deadline Invalid");
     if (timestamp < Date.now())
       return setDeadlineErrMsg("deadline Cannot be Past");
-    if (timestamp > deadlineLimit)
+    if (timestamp > deadlineLimitTimestamp)
       return setDeadlineErrMsg("Beyond 30 Days are Not Possibe");
 
     registerTaskReq();
-  }, [content, deadline, deadlineLimit, registerTaskReq]);
+  }, [content, deadline, deadlineLimitTimestamp, registerTaskReq]);
 
   return (
     <>
@@ -172,7 +178,7 @@ export const UserMenu = () => {
         onUpdateContent={setContent}
         contentErrMsg={contentErrMsg}
         deadline={deadline}
-        defaultDeadline={defaultDeadline}
+        defaultDeadline={deadlineLimitString}
         onUpdateDeadline={setDeadline}
         deadlineErrMsg={deadlineErrMsg}
       />
