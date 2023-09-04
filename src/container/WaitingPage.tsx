@@ -13,6 +13,7 @@ import {
   TodoListItem,
   type TodoListProps,
 } from "../view";
+import { formatTimestamp } from "../helper";
 
 export const WaitingPage = () => {
   const { user, setUser } = useContext(UserContext);
@@ -29,10 +30,15 @@ export const WaitingPage = () => {
     setModalVisible(false);
   }, []);
 
+  const todayString = useMemo(() => formatTimestamp(Date.now()), []);
   const renderItem = useCallback<TodoListProps["renderItem"]>(
     ({ item: todo, index }) =>
-      TodoListItem({ todo, onClick: () => openModal(index) }),
-    [openModal]
+      TodoListItem({
+        todo,
+        status: todayString > todo.deadline ? "overdue" : "leisurely",
+        onClick: () => openModal(index),
+      }),
+    [openModal, todayString]
   );
 
   const startTaskReqOpt = useMemo<RequestOption>(

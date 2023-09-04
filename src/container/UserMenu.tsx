@@ -14,14 +14,6 @@ import { WaitingPage, WorkingPage } from "../container";
 export const UserMenu = () => {
   const [content, setContent] = useState("");
   const [deadline, setDeadline] = useState("");
-  const deadlineLimit = useMemo(
-    () => Date.now() + 1_000 * 60 * 60 * 24 * 30,
-    []
-  );
-  const defaultDeadline = useMemo(
-    () => formatTimestamp(deadlineLimit),
-    [deadlineLimit]
-  );
 
   const [contentErrMsg, setContentErrMsg] = useState("");
   const [deadlineErrMsg, setDeadlineErrMsg] = useState("");
@@ -110,9 +102,12 @@ export const UserMenu = () => {
       path: `/tasks`,
       method: "POST",
       headers: { Authorization: `Bearer ${user?.token}` },
-      body: { content, deadline: deadline === "" ? defaultDeadline : deadline },
+      body: {
+        content,
+        deadline: formatTimestamp(Date.parse(deadline) || Date.now()),
+      },
     }),
-    [user, content, deadline, defaultDeadline]
+    [user, content, deadline]
   );
   const registerTaskResHandler = useCallback<RseponseHandler>(
     ({ task }) => {
@@ -148,16 +143,39 @@ export const UserMenu = () => {
     setDeadlineErrMsg("");
 
     if (!content) return setContentErrMsg("content Required");
+    if (!Date.parse(deadline)) return setDeadlineErrMsg("deadline Invalid");
 
-    const timestamp = deadline === "" ? deadlineLimit : Date.parse(deadline);
-    if (!timestamp) return setDeadlineErrMsg("deadline Invalid");
-    if (timestamp < Date.now())
+    if (deadline < formatTimestamp(Date.now()))
       return setDeadlineErrMsg("deadline Cannot be Past");
-    if (timestamp > deadlineLimit)
+    if (deadline > formatTimestamp(Date.now() + 1_000 * 60 * 60 * 24 * 30))
       return setDeadlineErrMsg("Beyond 30 Days are Not Possibe");
 
     registerTaskReq();
-  }, [content, deadline, deadlineLimit, registerTaskReq]);
+  }, [content, deadline, registerTaskReq]);
+
+  const deadlineShortcutList = useMemo(
+    () => [
+      {
+        label: "today",
+        onSelect() {
+          setDeadline(formatTimestamp(Date.now()));
+        },
+      },
+      {
+        label: "next_week",
+        onSelect() {
+          setDeadline(formatTimestamp(Date.now() + 1_000 * 60 * 60 * 24 * 7));
+        },
+      },
+      {
+        label: "next_month",
+        onSelect() {
+          setDeadline(formatTimestamp(Date.now() + 1_000 * 60 * 60 * 24 * 30));
+        },
+      },
+    ],
+    []
+  );
 
   return (
     <>
@@ -172,9 +190,9 @@ export const UserMenu = () => {
         onUpdateContent={setContent}
         contentErrMsg={contentErrMsg}
         deadline={deadline}
-        defaultDeadline={defaultDeadline}
         onUpdateDeadline={setDeadline}
         deadlineErrMsg={deadlineErrMsg}
+        shortcutList={deadlineShortcutList}
       />
     </>
   );

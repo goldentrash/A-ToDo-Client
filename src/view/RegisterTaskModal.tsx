@@ -1,4 +1,17 @@
-import { StyleSheet, Modal, View, Button, Text, TextInput } from "react-native";
+import {
+  StyleSheet,
+  Modal,
+  View,
+  Button,
+  Text,
+  TextInput,
+  Pressable,
+} from "react-native";
+
+type Shortcut = {
+  label: string;
+  onSelect(): void;
+};
 
 export type RegisterTaskModalProps = {
   visible: boolean;
@@ -8,9 +21,9 @@ export type RegisterTaskModalProps = {
   onUpdateContent: React.Dispatch<React.SetStateAction<string>>;
   contentErrMsg: string;
   deadline: string;
-  defaultDeadline: string;
   onUpdateDeadline: React.Dispatch<React.SetStateAction<string>>;
   deadlineErrMsg: string;
+  shortcutList: Shortcut[];
 };
 export const RegisterTaskModal = ({
   visible,
@@ -20,9 +33,9 @@ export const RegisterTaskModal = ({
   onUpdateContent,
   contentErrMsg,
   deadline,
-  defaultDeadline,
   onUpdateDeadline,
   deadlineErrMsg,
+  shortcutList,
 }: RegisterTaskModalProps) => {
   return (
     <Modal visible={visible} onRequestClose={onCancel}>
@@ -50,7 +63,7 @@ export const RegisterTaskModal = ({
 
             <View>
               <TextInput
-                placeholder={`deadline (by default, ${defaultDeadline})`}
+                placeholder="deadline"
                 value={deadline}
                 onChangeText={onUpdateDeadline}
                 maxLength={10}
@@ -59,6 +72,20 @@ export const RegisterTaskModal = ({
                   deadlineErrMsg !== "" && styles.modalInputContainerError,
                 ]}
               />
+              <View style={styles.modalShortcutBox}>
+                {shortcutList.map(({ label, onSelect }, index) => (
+                  <Pressable key={index} onPress={onSelect}>
+                    <Text
+                      style={[
+                        styles.modalShortcutItem,
+                        deadlineErrMsg !== "" && styles.modalShortcutItemError,
+                      ]}
+                    >
+                      {label}
+                    </Text>
+                  </Pressable>
+                ))}
+              </View>
               {deadlineErrMsg && (
                 <Text style={styles.modalErrorMessage}>{deadlineErrMsg}</Text>
               )}
@@ -106,6 +133,19 @@ const styles = StyleSheet.create({
   },
   modalInputContainerError: {
     borderColor: "#ff0000",
+  },
+  modalShortcutBox: {
+    flexDirection: "row",
+    gap: 14,
+    justifyContent: "flex-end",
+    margin: 2,
+  },
+  modalShortcutItem: {
+    color: "#0000EE",
+  },
+  modalShortcutItemError: {
+    borderBottomColor: "#ff0000",
+    borderBottomWidth: 1,
   },
   modalTitle: {
     fontSize: 18,
