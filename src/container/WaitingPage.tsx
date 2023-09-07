@@ -1,12 +1,7 @@
 import { useState, useContext, useCallback, useMemo } from "react";
 import { ToastAndroid } from "react-native";
 import { UserContext } from "../context";
-import {
-  useApi,
-  type RequestOption,
-  type RseponseHandler,
-  type ErrorHandler,
-} from "../hook";
+import { useApi } from "../hook";
 import {
   StartTaskModal,
   TodoList,
@@ -41,16 +36,13 @@ export const WaitingPage = () => {
     [openModal, todayString]
   );
 
-  const startTaskReqOpt = useMemo<RequestOption>(
-    () => ({
+  const requestStartTask = useApi(
+    {
       path: `/tasks/${user.todoList[selectedTaskIndex]?.id}`,
       method: "PATCH",
       headers: { Authorization: `Bearer ${user?.token}` },
       body: { action: "start" },
-    }),
-    [selectedTaskIndex, user]
-  );
-  const startTaskResHandler = useCallback<RseponseHandler>(
+    },
     ({ task }) => {
       user.todoList.splice(selectedTaskIndex, 1);
       setUser({
@@ -61,20 +53,11 @@ export const WaitingPage = () => {
       });
       closeModal();
     },
-    [user, selectedTaskIndex, setUser, closeModal]
-  );
-  const startTaskErrHandler = useCallback<ErrorHandler>(
     () =>
       ToastAndroid.show(
         "Fail to Start Task, please retry again",
         ToastAndroid.LONG
-      ),
-    []
-  );
-  const startTaskReq = useApi(
-    startTaskReqOpt,
-    startTaskResHandler,
-    startTaskErrHandler
+      )
   );
 
   return (
@@ -83,7 +66,7 @@ export const WaitingPage = () => {
 
       <StartTaskModal
         visible={modalVisible}
-        onSubmit={startTaskReq}
+        onSubmit={requestStartTask}
         onCancel={closeModal}
         todo={user.todoList[selectedTaskIndex]}
       />

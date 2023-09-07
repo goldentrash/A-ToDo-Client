@@ -1,12 +1,7 @@
-import { useState, useCallback, useContext, useMemo } from "react";
+import { useState, useCallback, useContext } from "react";
 import { ToastAndroid } from "react-native";
 import { UserContext } from "../context";
-import {
-  useApi,
-  type RequestOption,
-  type RseponseHandler,
-  type ErrorHandler,
-} from "../hook";
+import { useApi } from "../hook";
 import { SignIn, SignUpModal } from "../view";
 
 export const AuthPage = () => {
@@ -33,27 +28,25 @@ export const AuthPage = () => {
   }, []);
 
   const { setUser } = useContext(UserContext);
-  const signInReqOpt = useMemo<RequestOption>(
-    () => ({
+  const requestSignIn = useApi(
+    {
       path: `/users/${id}/token`,
       method: "POST",
       body: { password },
-    }),
-    [id, password]
-  );
-  const signInResHandler = useCallback<RseponseHandler>(
+    },
     ({ token }) =>
       setUser({ id, state: "rest", token, todoList: [], doing: null }),
-    [id, setUser]
-  );
-  const signInErrHandler = useCallback<ErrorHandler>((err) => {
-    if (err.message === "User Absent") return setIdErrMsg("Wrong User ID");
-    if (err.message === "Password Invalid")
-      return setPasswordErrMsg("Wrong Password");
+    (err) => {
+      if (err.message === "User Absent") return setIdErrMsg("Wrong User ID");
+      if (err.message === "Password Invalid")
+        return setPasswordErrMsg("Wrong Password");
 
-    ToastAndroid.show("Fail to Sign In, please retry again", ToastAndroid.LONG);
-  }, []);
-  const signInReq = useApi(signInReqOpt, signInResHandler, signInErrHandler);
+      ToastAndroid.show(
+        "Fail to Sign In, please retry again",
+        ToastAndroid.LONG
+      );
+    }
+  );
   const signIn = useCallback(() => {
     setIdErrMsg("");
     setPasswordErrMsg("");
@@ -61,27 +54,26 @@ export const AuthPage = () => {
     if (!id) return setIdErrMsg("ID Required");
     if (!password) return setPasswordErrMsg("password Required");
 
-    signInReq();
-  }, [id, password, signInReq]);
+    requestSignIn();
+  }, [id, password, requestSignIn]);
 
-  const signUpReqOpt = useMemo<RequestOption>(
-    () => ({
+  const requestSignUp = useApi(
+    {
       path: `/users`,
       method: "POST",
       body: { id, password },
-    }),
-    [id, password]
-  );
-  const signUpResHandler = useCallback<RseponseHandler>(closeModal, [
+    },
     closeModal,
-  ]);
-  const signUpErrHandler = useCallback<ErrorHandler>((err) => {
-    if (err.message === "User ID Duplicated")
-      return setIdErrMsg("Duplicated User ID");
+    (err) => {
+      if (err.message === "User ID Duplicated")
+        return setIdErrMsg("Duplicated User ID");
 
-    ToastAndroid.show("Fail to Sign Up, please retry again", ToastAndroid.LONG);
-  }, []);
-  const signUpReq = useApi(signUpReqOpt, signUpResHandler, signUpErrHandler);
+      ToastAndroid.show(
+        "Fail to Sign Up, please retry again",
+        ToastAndroid.LONG
+      );
+    }
+  );
   const signUp = useCallback(() => {
     setIdErrMsg("");
     setPasswordErrMsg("");
@@ -89,8 +81,8 @@ export const AuthPage = () => {
     if (!id) return setIdErrMsg("ID Required");
     if (!password) return setPasswordErrMsg("password Required");
 
-    signUpReq();
-  }, [id, password, signUpReq]);
+    requestSignUp();
+  }, [id, password, requestSignUp]);
 
   return (
     <>

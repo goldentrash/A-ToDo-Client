@@ -1,12 +1,7 @@
-import { useState, useCallback, useContext, useRef, useMemo } from "react";
+import { useState, useCallback, useContext, useRef } from "react";
 import { type TextInput, ToastAndroid } from "react-native";
 import { UserContext } from "../context";
-import {
-  useApi,
-  type RequestOption,
-  type RseponseHandler,
-  type ErrorHandler,
-} from "../hook";
+import { useApi } from "../hook";
 import { FinishTaskModal, Working } from "../view";
 
 export const WorkingPage = () => {
@@ -16,37 +11,25 @@ export const WorkingPage = () => {
   const [memo, setMemo] = useState(user.doing.memo);
   const memoInputRef = useRef<TextInput>(null);
 
-  const saveMemoReqOpt = useMemo<RequestOption>(
-    () => ({
+  const requestSaveMemo = useApi(
+    {
       path: `/tasks/${user.doing.id}/memo`,
       method: "PUT",
       headers: { Authorization: `Bearer ${user?.token}` },
       body: { memo },
-    }),
-    [user, memo]
-  );
-  const saveMemoResHandler = useCallback<RseponseHandler>(
+    },
     ({ task: { memo } }) =>
       setUser({ ...user, doing: { ...user.doing, memo } }),
-    [user, setUser]
-  );
-  const saveMemoErrHandler = useCallback<ErrorHandler>(
     () =>
       ToastAndroid.show(
         "Fail to Save Memo, please retry again",
         ToastAndroid.LONG
-      ),
-    []
-  );
-  const saveMemoReq = useApi(
-    saveMemoReqOpt,
-    saveMemoResHandler,
-    saveMemoErrHandler
+      )
   );
   const saveMemo = useCallback(() => {
-    saveMemoReq();
+    requestSaveMemo();
     memoInputRef.current?.blur();
-  }, [saveMemoReq]);
+  }, [requestSaveMemo]);
 
   const [modalVisible, setModalVisible] = useState(false);
   const openModal = useCallback(() => setModalVisible(true), []);
@@ -54,31 +37,22 @@ export const WorkingPage = () => {
     setModalVisible(false);
   }, []);
 
-  const finishTaskReqOpt = useMemo<RequestOption>(
-    () => ({
+  const requestFinishTask = useApi(
+    {
       path: `/tasks/${user.doing.id}`,
       method: "PATCH",
       headers: { Authorization: `Bearer ${user?.token}` },
       body: { action: "finish" },
-    }),
-    [user]
-  );
-  const finishTaskResHandler = useCallback<RseponseHandler>(() => {
-    setUser({ ...user, state: "rest", doing: null });
-    closeModal();
-  }, [user, setUser, closeModal]);
-  const finishTaskErrHandler = useCallback<ErrorHandler>(
+    },
+    () => {
+      setUser({ ...user, state: "rest", doing: null });
+      closeModal();
+    },
     () =>
       ToastAndroid.show(
         "Fail to Finish Task, please retry again",
         ToastAndroid.LONG
-      ),
-    []
-  );
-  const finishTaskReq = useApi(
-    finishTaskReqOpt,
-    finishTaskResHandler,
-    finishTaskErrHandler
+      )
   );
 
   return (
@@ -93,7 +67,7 @@ export const WorkingPage = () => {
       />
       <FinishTaskModal
         visible={modalVisible}
-        onSubmit={finishTaskReq}
+        onSubmit={requestFinishTask}
         onCancel={closeModal}
         doing={user.doing}
       />
