@@ -48,7 +48,7 @@ export const UserMenu = () => {
         doing,
       } as User);
     },
-    () =>
+    (_err) =>
       ToastAndroid.show(
         "Fail to Get Tasks, please retry again",
         ToastAndroid.LONG
@@ -82,7 +82,7 @@ export const UserMenu = () => {
       });
       closeModal();
     },
-    () =>
+    (_err) =>
       ToastAndroid.show(
         "Fail to Register Task, please retry again",
         ToastAndroid.LONG

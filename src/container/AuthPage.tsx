@@ -63,7 +63,7 @@ export const AuthPage = () => {
       method: "POST",
       body: { id, password },
     },
-    closeModal,
+    (_res) => closeModal(),
     (err) => {
       if (err.message === "User ID Duplicated")
         return setIdErrMsg("Duplicated User ID");

@@ -20,7 +20,7 @@ export const WorkingPage = () => {
     },
     ({ task: { memo } }) =>
       setUser({ ...user, doing: { ...user.doing, memo } }),
-    () =>
+    (_err) =>
       ToastAndroid.show(
         "Fail to Save Memo, please retry again",
         ToastAndroid.LONG
@@ -44,11 +44,11 @@ export const WorkingPage = () => {
       headers: { Authorization: `Bearer ${user?.token}` },
       body: { action: "finish" },
     },
-    () => {
+    (_res) => {
       setUser({ ...user, state: "rest", doing: null });
       closeModal();
     },
-    () =>
+    (_err) =>
       ToastAndroid.show(
         "Fail to Finish Task, please retry again",
         ToastAndroid.LONG

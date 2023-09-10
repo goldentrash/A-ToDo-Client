@@ -53,7 +53,7 @@ export const WaitingPage = () => {
       });
       closeModal();
     },
-    () =>
+    (_err) =>
       ToastAndroid.show(
         "Fail to Start Task, please retry again",
         ToastAndroid.LONG
