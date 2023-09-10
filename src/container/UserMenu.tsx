@@ -1,14 +1,9 @@
 import { useState, useCallback, useContext, useMemo, useEffect } from "react";
 import { ToastAndroid } from "react-native";
-import { UserContext, type Task, type User } from "../context";
-import {
-  useApi,
-  type RequestOption,
-  type RseponseHandler,
-  type ErrorHandler,
-} from "../hook";
+import { UserContext, type User } from "../context";
+import { useApi } from "../hook";
 import { FloatingButton, RegisterTaskModal } from "../view";
-import { formatTimestamp } from "../helper";
+import { formatTimestamp, classifyTaskList } from "../helper";
 import { WaitingPage, WorkingPage } from "../container";
 
 export const UserMenu = () => {
@@ -37,38 +32,14 @@ export const UserMenu = () => {
   const { user, setUser } = useContext(UserContext);
   if (!user) throw Error("unreachable case");
 
-  const getTasksOpt = useMemo<RequestOption>(
-    () => ({
+  const requestGetTasks = useApi(
+    {
       path: `/tasks?sort=deadline&progress=todo&progress=doing`,
       method: "GET",
       headers: { Authorization: `Bearer ${user.token}` },
-    }),
-    [user]
-  );
-  const getTasksResHandler = useCallback<RseponseHandler>(
+    },
     ({ taskList }) => {
-      const [todoList, doing] = (taskList as Task[]).reduce<
-        [Task[], Task | null]
-      >(
-        ([todoList, doing], task) => {
-          const { progress } = task;
-          switch (progress) {
-            case "todo":
-              todoList = [...todoList, task];
-              break;
-            case "doing":
-              doing = task;
-              break;
-            default:
-              ((_progress: never) => {
-                throw Error("unreachable case");
-              })(progress);
-          }
-
-          return [todoList, doing];
-        },
-        [[], null]
-      );
+      const [todoList, doing] = classifyTaskList(taskList);
 
       setUser({
         ...user,
@@ -77,28 +48,19 @@ export const UserMenu = () => {
         doing,
       } as User);
     },
-    [user, setUser]
-  );
-  const getTasksErrHandler = useCallback<ErrorHandler>(
-    () =>
+    (_err) =>
       ToastAndroid.show(
         "Fail to Get Tasks, please retry again",
         ToastAndroid.LONG
-      ),
-    []
-  );
-  const getTasksReq = useApi(
-    getTasksOpt,
-    getTasksResHandler,
-    getTasksErrHandler
+      )
   );
   const getTasks = useCallback(() => {
-    getTasksReq();
-  }, [getTasksReq]);
+    requestGetTasks();
+  }, [requestGetTasks]);
   useEffect(getTasks, [getTasks]);
 
-  const registerTaskReqOpt = useMemo<RequestOption>(
-    () => ({
+  const requestRegisterTask = useApi(
+    {
       path: `/tasks`,
       method: "POST",
       headers: { Authorization: `Bearer ${user?.token}` },
@@ -106,10 +68,7 @@ export const UserMenu = () => {
         content,
         deadline: formatTimestamp(Date.parse(deadline) || Date.now()),
       },
-    }),
-    [user, content, deadline]
-  );
-  const registerTaskResHandler = useCallback<RseponseHandler>(
+    },
     ({ task }) => {
       setUser({
         ...user,
@@ -123,20 +82,11 @@ export const UserMenu = () => {
       });
       closeModal();
     },
-    [user, setUser, closeModal]
-  );
-  const registerTaskErrHandler = useCallback<ErrorHandler>(
-    () =>
+    (_err) =>
       ToastAndroid.show(
         "Fail to Register Task, please retry again",
         ToastAndroid.LONG
-      ),
-    []
-  );
-  const registerTaskReq = useApi(
-    registerTaskReqOpt,
-    registerTaskResHandler,
-    registerTaskErrHandler
+      )
   );
   const registerTask = useCallback(() => {
     setContentErrMsg("");
@@ -150,30 +100,30 @@ export const UserMenu = () => {
     if (deadline > formatTimestamp(Date.now() + 1_000 * 60 * 60 * 24 * 30))
       return setDeadlineErrMsg("Beyond 30 Days are Not Possibe");
 
-    registerTaskReq();
-  }, [content, deadline, registerTaskReq]);
+    requestRegisterTask();
+  }, [content, deadline, requestRegisterTask]);
 
   const deadlineShortcutList = useMemo(
-    () => [
-      {
-        label: "today",
-        onSelect() {
-          setDeadline(formatTimestamp(Date.now()));
+    () =>
+      [
+        {
+          label: "today",
+          timestamp: Date.now(),
         },
-      },
-      {
-        label: "next_week",
-        onSelect() {
-          setDeadline(formatTimestamp(Date.now() + 1_000 * 60 * 60 * 24 * 7));
+        {
+          label: "next_week",
+          timestamp: Date.now() + 1_000 * 60 * 60 * 24 * 7,
         },
-      },
-      {
-        label: "next_month",
-        onSelect() {
-          setDeadline(formatTimestamp(Date.now() + 1_000 * 60 * 60 * 24 * 30));
+        {
+          label: "next_month",
+          timestamp: Date.now() + 1_000 * 60 * 60 * 24 * 30,
         },
-      },
-    ],
+      ].map((shortcut) => ({
+        ...shortcut,
+        onSelect() {
+          setDeadline(formatTimestamp(shortcut.timestamp));
+        },
+      })),
     []
   );
 
