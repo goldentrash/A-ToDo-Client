@@ -1,7 +1,7 @@
 import { StyleSheet, View, Button } from "react-native";
 
 export type FloatingButtonProps = {
-  openModal: () => void;
+  openModal(): void;
   title: string;
 };
 export const FloatingButton = ({ openModal, title }: FloatingButtonProps) => {

@@ -1,28 +1,35 @@
 import { useState, useMemo } from "react";
 import { ErrorBoundary } from "react-error-boundary";
-import { LoadingContext, UserContext } from "./src/context";
-import { type User } from "./src/context";
-import { Fallback, Root } from "./src/view";
+import { UserContext, LoadingContext, type User } from "./context";
+import { Fallback, Root } from "./view";
 
 export default function App() {
   const [loadingCount, setLoadingCount] = useState(0);
-  const loadingContextValue = useMemo(
+  const loadingContextValue = useMemo<LoadingContext>(
     () => ({
-      loadingCount,
-      setLoadingCount,
+      startLoading() {
+        setLoadingCount((prev) => prev + 1);
+      },
+      finishLoading() {
+        setLoadingCount((prev) => prev - 1);
+      },
     }),
-    [loadingCount, setLoadingCount]
+    []
   );
+
+  const [user, setUser] = useState<User>(null);
+  const userContextValue = useMemo<UserContext>(
+    () => ({ user, setUser }),
+    [user]
+  );
+
   const isLoading = useMemo(() => loadingCount > 0, [loadingCount]);
-
-  const [user, setUser] = useState<User | null>(null);
-  const userContextValue = useMemo(() => ({ user, setUser }), [user, setUser]);
-
+  const isLogin = useMemo(() => user !== null, [user]);
   return (
     <ErrorBoundary FallbackComponent={Fallback}>
       <LoadingContext.Provider value={loadingContextValue}>
         <UserContext.Provider value={userContextValue}>
-          <Root isLoading={isLoading} user={user} />
+          <Root isLoading={isLoading} isLogin={isLogin} />
         </UserContext.Provider>
       </LoadingContext.Provider>
     </ErrorBoundary>

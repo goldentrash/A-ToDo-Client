@@ -1,6 +1,14 @@
 {
   "extends": "expo/tsconfig.base",
-  "include": ["src/**/*", "App.tsx"],
+  "include": [
+    "constant/**/*",
+    "view/**/*",
+    "context/**/*",
+    "controller/**/*",
+    "service/**/*",
+    "repository/**/*",
+    "App.tsx"
+  ],
   "compilerOptions": {
     "strict": true,
     "importsNotUsedAsValues": "remove"

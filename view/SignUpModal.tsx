@@ -1,9 +1,18 @@
 import { Button, Modal, View, Text, TextInput, StyleSheet } from "react-native";
+import {
+  COLOR_BACKGROUND,
+  COLOR_ERROR,
+  COLOR_SHADOWED,
+  FONT_SIZE_HINT,
+  FONT_SIZE_TITLE,
+  LIMIT_PASSWORD_CHAR,
+  LIMIT_USER_ID_CHAR,
+} from "../constant";
 
 export type SignUpModalProps = {
   visible: boolean;
-  onSubmit: () => void;
-  onCancel: () => void;
+  onSubmit(): void;
+  onCancel(): void;
   id: string;
   onUpdateId: React.Dispatch<React.SetStateAction<string>>;
   idErrMsg: string;
@@ -34,7 +43,7 @@ export const SignUpModal = ({
                 placeholder="ID"
                 value={id}
                 onChangeText={onUpdateId}
-                maxLength={10}
+                maxLength={LIMIT_USER_ID_CHAR}
                 style={[
                   styles.modalInput,
                   idErrMsg !== "" && styles.modalInputContainerError,
@@ -50,7 +59,7 @@ export const SignUpModal = ({
                 placeholder="password"
                 value={password}
                 onChangeText={onUpdatePassword}
-                maxLength={15}
+                maxLength={LIMIT_PASSWORD_CHAR}
                 style={[
                   styles.modalInput,
                   passwordErrMsg !== "" && styles.modalInputContainerError,
@@ -72,16 +81,16 @@ export const SignUpModal = ({
 const styles = StyleSheet.create({
   modalBackground: {
     alignItems: "center",
-    backgroundColor: "#ecf0f180",
+    backgroundColor: COLOR_SHADOWED,
     flex: 1,
     justifyContent: "center",
   },
   modalErrorMessage: {
-    color: "#ff0000",
-    fontSize: 12,
+    color: COLOR_ERROR,
+    fontSize: FONT_SIZE_HINT,
   },
   modalForeground: {
-    backgroundColor: "#ffffff",
+    backgroundColor: COLOR_BACKGROUND,
     borderRadius: 8,
     borderWidth: 1,
     gap: 12,
@@ -101,10 +110,10 @@ const styles = StyleSheet.create({
     paddingVertical: 16,
   },
   modalInputContainerError: {
-    borderColor: "#ff0000",
+    borderColor: COLOR_ERROR,
   },
   modalTitle: {
-    fontSize: 18,
+    fontSize: FONT_SIZE_TITLE,
     fontWeight: "bold",
   },
 });

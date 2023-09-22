@@ -24,5 +24,4 @@ rules:
     - argsIgnorePattern: ^_
       ignoreRestSiblings: true
   react/react-in-jsx-scope: off
-  react-native/no-color-literals: off # will be set to error later
   react-native/split-platform-components: off # A-ToDo only supports Android version

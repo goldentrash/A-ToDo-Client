@@ -1,10 +1,16 @@
 import { Pressable, Text, StyleSheet } from "react-native";
-import { type Task } from "../context";
+import { type TaskVO } from "../service";
+import {
+  COLOR_BLACK,
+  COLOR_WARNING,
+  FONT_SIZE_HINT,
+  FONT_SIZE_NORMAL,
+} from "../constant";
 
 export type TodoListItemProps = {
-  todo: Task;
+  todo: TaskVO;
   status: "overdue" | "leisurely";
-  onClick: () => void;
+  onClick(): void;
 };
 export const TodoListItem = ({
   todo: { content, deadline },
@@ -27,7 +33,7 @@ export const TodoListItem = ({
 
 const styles = StyleSheet.create({
   itemContainer: {
-    borderColor: "black",
+    borderColor: COLOR_BLACK,
     borderRadius: 6,
     borderWidth: 1,
     margin: 8,
@@ -35,13 +41,13 @@ const styles = StyleSheet.create({
     paddingVertical: 6,
   },
   itemOverdued: {
-    backgroundColor: "#FFB6C1",
+    backgroundColor: COLOR_WARNING,
   },
   itemTextContent: {
-    fontSize: 16,
+    fontSize: FONT_SIZE_NORMAL,
   },
   itemTextDeadline: {
-    fontSize: 12,
+    fontSize: FONT_SIZE_HINT,
     textAlign: "right",
   },
 });
