@@ -7,6 +7,15 @@ import {
   TextInput,
   Pressable,
 } from "react-native";
+import {
+  COLOR_BACKGROUND,
+  COLOR_ERROR,
+  COLOR_LINK,
+  COLOR_SHADOWED,
+  FONT_SIZE_HINT,
+  FONT_SIZE_TITLE,
+  LIMIT_CONTENT_CHAR,
+} from "../constant";
 
 type Shortcut = {
   label: string;
@@ -15,8 +24,8 @@ type Shortcut = {
 
 export type RegisterTaskModalProps = {
   visible: boolean;
-  onSubmit: () => void;
-  onCancel: () => void;
+  onSubmit(): void;
+  onCancel(): void;
   content: string;
   onUpdateContent: React.Dispatch<React.SetStateAction<string>>;
   contentErrMsg: string;
@@ -49,7 +58,7 @@ export const RegisterTaskModal = ({
                 placeholder="content"
                 value={content}
                 onChangeText={onUpdateContent}
-                maxLength={100}
+                maxLength={LIMIT_CONTENT_CHAR}
                 multiline
                 style={[
                   styles.modalInput,
@@ -102,37 +111,37 @@ export const RegisterTaskModal = ({
 const styles = StyleSheet.create({
   modalBackground: {
     alignItems: "center",
-    backgroundColor: "#ecf0f180",
+    backgroundColor: COLOR_SHADOWED,
     flex: 1,
     justifyContent: "center",
   },
   modalErrorMessage: {
-    color: "#ff0000",
-    fontSize: 12,
+    color: COLOR_ERROR,
+    fontSize: FONT_SIZE_HINT,
   },
   modalForeground: {
-    backgroundColor: "#ffffff",
+    backgroundColor: COLOR_BACKGROUND,
     borderRadius: 8,
     borderWidth: 1,
     gap: 12,
-    height: 380,
+    minHeight: 380,
     padding: 32,
     width: "80%",
   },
   modalInput: {
     borderRadius: 4,
     borderWidth: 1,
-    maxHeight: 140,
+    maxHeight: 180,
     padding: 6,
   },
   modalInputContainer: {
     borderTopWidth: 1,
     gap: 8,
-    height: 220,
+    minHeight: 220,
     paddingVertical: 16,
   },
   modalInputContainerError: {
-    borderColor: "#ff0000",
+    borderColor: COLOR_ERROR,
   },
   modalShortcutBox: {
     flexDirection: "row",
@@ -141,14 +150,14 @@ const styles = StyleSheet.create({
     margin: 2,
   },
   modalShortcutItem: {
-    color: "#0000EE",
+    color: COLOR_LINK,
   },
   modalShortcutItemError: {
-    borderBottomColor: "#ff0000",
+    borderBottomColor: COLOR_ERROR,
     borderBottomWidth: 1,
   },
   modalTitle: {
-    fontSize: 18,
+    fontSize: FONT_SIZE_TITLE,
     fontWeight: "bold",
   },
 });

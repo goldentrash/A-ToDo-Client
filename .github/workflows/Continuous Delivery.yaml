@@ -1,0 +1,32 @@
+name: Continuous Delivery
+
+on:
+  pull_request:
+    branches:
+      - master
+
+jobs:
+  Continuous_Delivery:
+    runs-on: ubuntu-22.04
+
+    steps:
+      - name: Set up sources
+        uses: actions/checkout@v3
+
+      - name: Set up Node.js
+        uses: actions/setup-node@v3
+        with:
+          node-version: 16.18
+          cache: yarn
+
+      - name: Install dependencies
+        run: yarn --frozen-lockfile
+
+      - name: Connect to Expo
+        uses: expo/expo-github-action@v8
+        with:
+          eas-version: ^3.14.0
+          token: ${{ secrets.EXPO_TOKEN }}
+
+      - name: Build apk
+        run: yarn build

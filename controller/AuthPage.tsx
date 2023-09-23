@@ -1,8 +1,8 @@
 import { useState, useCallback, useContext } from "react";
 import { ToastAndroid } from "react-native";
-import { UserContext } from "../context";
-import { useApi } from "../hook";
+import { UserContext, LoadingContext } from "../context";
 import { SignIn, SignUpModal } from "../view";
+import { userService } from "../service";
 
 export const AuthPage = () => {
   const [id, setId] = useState("");
@@ -27,26 +27,9 @@ export const AuthPage = () => {
     setModalVisible(false);
   }, []);
 
+  const { startLoading, finishLoading } = useContext(LoadingContext);
   const { setUser } = useContext(UserContext);
-  const requestSignIn = useApi(
-    {
-      path: `/users/${id}/token`,
-      method: "POST",
-      body: { password },
-    },
-    ({ token }) =>
-      setUser({ id, state: "rest", token, todoList: [], doing: null }),
-    (err) => {
-      if (err.message === "User Absent") return setIdErrMsg("Wrong User ID");
-      if (err.message === "Password Invalid")
-        return setPasswordErrMsg("Wrong Password");
 
-      ToastAndroid.show(
-        "Fail to Sign In, please retry again",
-        ToastAndroid.LONG
-      );
-    }
-  );
   const signIn = useCallback(() => {
     setIdErrMsg("");
     setPasswordErrMsg("");
@@ -54,26 +37,23 @@ export const AuthPage = () => {
     if (!id) return setIdErrMsg("ID Required");
     if (!password) return setPasswordErrMsg("password Required");
 
-    requestSignIn();
-  }, [id, password, requestSignIn]);
+    startLoading();
+    userService
+      .signIn({ id }, password)
+      .then(setUser)
+      .catch((err) => {
+        if (err.message === "User Absent") return setIdErrMsg("Wrong User ID");
+        if (err.message === "Password Invalid")
+          return setPasswordErrMsg("Wrong Password");
 
-  const requestSignUp = useApi(
-    {
-      path: `/users`,
-      method: "POST",
-      body: { id, password },
-    },
-    (_res) => closeModal(),
-    (err) => {
-      if (err.message === "User ID Duplicated")
-        return setIdErrMsg("Duplicated User ID");
+        ToastAndroid.show(
+          "Fail to Sign In, please retry again",
+          ToastAndroid.LONG
+        );
+      })
+      .finally(finishLoading);
+  }, [id, password, startLoading, finishLoading, setUser]);
 
-      ToastAndroid.show(
-        "Fail to Sign Up, please retry again",
-        ToastAndroid.LONG
-      );
-    }
-  );
   const signUp = useCallback(() => {
     setIdErrMsg("");
     setPasswordErrMsg("");
@@ -81,8 +61,21 @@ export const AuthPage = () => {
     if (!id) return setIdErrMsg("ID Required");
     if (!password) return setPasswordErrMsg("password Required");
 
-    requestSignUp();
-  }, [id, password, requestSignUp]);
+    startLoading();
+    userService
+      .signUp({ id }, password)
+      .then(closeModal)
+      .catch((err) => {
+        if (err.message === "User ID Duplicated")
+          return setIdErrMsg("Duplicated User ID");
+
+        ToastAndroid.show(
+          "Fail to Sign Up, please retry again",
+          ToastAndroid.LONG
+        );
+      })
+      .finally(finishLoading);
+  }, [id, password, startLoading, finishLoading, closeModal]);
 
   return (
     <>

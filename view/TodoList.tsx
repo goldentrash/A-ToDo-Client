@@ -5,11 +5,12 @@ import {
   StyleSheet,
   View,
 } from "react-native";
-import { type Task } from "../context";
+import { type TaskVO } from "../service";
+import { FONT_SIZE_TITLE } from "../constant";
 
 export type TodoListProps = {
-  todoList: Task[];
-  renderItem: ListRenderItem<Task>;
+  todoList: TaskVO[];
+  renderItem: ListRenderItem<TaskVO>;
 };
 export const TodoList = ({ todoList, renderItem }: TodoListProps) => {
   return (
@@ -30,7 +31,7 @@ const styles = StyleSheet.create({
   },
   title: {
     borderBottomWidth: 1,
-    fontSize: 18,
+    fontSize: FONT_SIZE_TITLE,
     fontWeight: "bold",
     paddingBottom: 16,
   },

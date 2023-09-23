@@ -6,10 +6,18 @@ import {
   StyleSheet,
   Pressable,
 } from "react-native";
+import {
+  LIMIT_USER_ID_CHAR,
+  LIMIT_PASSWORD_CHAR,
+  COLOR_ERROR,
+  COLOR_LINK,
+  FONT_SIZE_TITLE,
+  FONT_SIZE_HINT,
+} from "../constant";
 
 export type SignInProps = {
-  onSubmit: () => void;
-  openSignUpModal: () => void;
+  onSubmit(): void;
+  openSignUpModal(): void;
   id: string;
   onUpdateId: React.Dispatch<React.SetStateAction<string>>;
   idErrMsg: string;
@@ -37,7 +45,7 @@ export const SignIn = ({
             placeholder="ID"
             value={id}
             onChangeText={onUpdateId}
-            maxLength={10}
+            maxLength={LIMIT_USER_ID_CHAR}
             style={[
               styles.input,
               idErrMsg !== "" && styles.inputContainerError,
@@ -52,7 +60,7 @@ export const SignIn = ({
             placeholder="password"
             value={password}
             onChangeText={onUpdatePassword}
-            maxLength={15}
+            maxLength={LIMIT_PASSWORD_CHAR}
             style={[
               styles.input,
               passwordErrMsg !== "" && styles.inputContainerError,
@@ -82,8 +90,8 @@ const styles = StyleSheet.create({
     width: "80%",
   },
   errorMessage: {
-    color: "#ff0000",
-    fontSize: 12,
+    color: COLOR_ERROR,
+    fontSize: FONT_SIZE_HINT,
   },
   input: {
     borderRadius: 4,
@@ -94,10 +102,10 @@ const styles = StyleSheet.create({
     gap: 12,
   },
   inputContainerError: {
-    borderColor: "#ff0000",
+    borderColor: COLOR_ERROR,
   },
   link: {
-    color: "#0000EE",
+    color: COLOR_LINK,
     textAlign: "right",
   },
   submitButton: {
@@ -106,7 +114,7 @@ const styles = StyleSheet.create({
   },
   title: {
     borderBottomWidth: 1,
-    fontSize: 18,
+    fontSize: FONT_SIZE_TITLE,
     fontWeight: "bold",
     paddingBottom: 16,
   },
