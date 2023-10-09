@@ -1,6 +1,7 @@
 import { Button, View, Text, TextInput, StyleSheet } from "react-native";
 import { type TaskVO } from "../../services";
 import {
+  COLOR_WARNING,
   FONT_SIZE_HINT,
   FONT_SIZE_TITLE,
   LIMIT_CONTENT_CHAR,
@@ -13,6 +14,7 @@ export type WorkingProps = {
   input: string;
   onUpdateInput: React.Dispatch<React.SetStateAction<string>>;
   inputRef: React.RefObject<TextInput>;
+  status: "overdue" | "leisurely";
 };
 export const Working = ({
   submitTitle,
@@ -21,6 +23,7 @@ export const Working = ({
   input,
   onUpdateInput,
   inputRef,
+  status,
 }: WorkingProps) => {
   return (
     <View style={styles.container}>
@@ -31,7 +34,7 @@ export const Working = ({
 
       <View style={styles.inputContainer}>
         <TextInput
-          style={styles.input}
+          style={[styles.input, status === "overdue" && styles.taskOverdued]}
           ref={inputRef}
           value={input}
           onChangeText={onUpdateInput}
@@ -58,6 +61,9 @@ const styles = StyleSheet.create({
   inputContainer: {
     height: "50%",
     paddingVertical: 16,
+  },
+  taskOverdued: {
+    backgroundColor: COLOR_WARNING,
   },
   textContainer: {
     borderBottomWidth: 1,

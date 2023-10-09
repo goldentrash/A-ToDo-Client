@@ -2,6 +2,7 @@ import { useState, useCallback, useContext, useRef } from "react";
 import { type TextInput, ToastAndroid } from "react-native";
 import { LoadingContext, UserContext } from "../../contexts";
 import { taskService } from "../../services";
+import { timestamp2string } from "../helper";
 import { FinishTaskModal } from "../views/FinishTaskModal";
 import { Working } from "../views/Working";
 
@@ -55,23 +56,23 @@ export const WorkingPage = () => {
       .finally(finishLoading);
   }, [startLoading, finishLoading, user, setUser, closeModal, doing]);
 
+  const todayString = timestamp2string(Date.now());
   return (
     <>
       <Working
-        submitTitle={
-          input === user.doing.content ? "Finish Task" : "Save Content"
-        }
-        onSubmit={input === user.doing.content ? openModal : saveContent}
-        task={user.doing}
+        submitTitle={input === doing.content ? "Finish Task" : "Save Content"}
+        onSubmit={input === doing.content ? openModal : saveContent}
+        task={doing}
         input={input}
         onUpdateInput={setInput}
         inputRef={inputRef}
+        status={todayString > doing.deadline ? "overdue" : "leisurely"}
       />
       <FinishTaskModal
         visible={modalVisible}
         onSubmit={finishDoing}
         onCancel={closeModal}
-        doing={user.doing}
+        doing={doing}
       />
     </>
   );
