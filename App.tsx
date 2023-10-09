@@ -1,7 +1,18 @@
 import { useState, useMemo } from "react";
+import * as Notifications from "expo-notifications";
 import { ErrorBoundary } from "react-error-boundary";
 import { UserContext, LoadingContext, type User } from "./context";
 import { Fallback, Root } from "./view";
+
+Notifications.setNotificationHandler({
+  async handleNotification() {
+    return {
+      shouldPlaySound: false,
+      shouldSetBadge: false,
+      shouldShowAlert: true,
+    };
+  },
+});
 
 export default function App() {
   const [loadingCount, setLoadingCount] = useState(0);
