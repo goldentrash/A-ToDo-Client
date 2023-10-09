@@ -1,0 +1,29 @@
+{
+  "project_info": {
+    "project_number": "252399952299",
+    "project_id": "a-todo-309bb",
+    "storage_bucket": "a-todo-309bb.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:252399952299:android:b8a6e24c2b25b4ed35f2ee",
+        "android_client_info": {
+          "package_name": "pe.kr.whitepiano.a_todo"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyB4BFBnl2I4Hfl5bcTv1vCLGMQvlUBhV3o"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
