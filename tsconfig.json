@@ -1,12 +1,11 @@
 {
   "extends": "expo/tsconfig.base",
   "include": [
-    "constant/**/*",
-    "view/**/*",
-    "context/**/*",
-    "controller/**/*",
-    "service/**/*",
-    "repository/**/*",
+    "components/**/*",
+    "constants/**/*",
+    "contexts/**/*",
+    "repositories/**/*",
+    "services/**/*",
     "App.tsx"
   ],
   "compilerOptions": {

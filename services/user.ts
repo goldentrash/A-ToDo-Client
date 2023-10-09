@@ -1,5 +1,5 @@
-import { type UserVO } from "./types";
-import { userRepo, taskRepo } from "../repository";
+import { type UserVO } from "./type";
+import { userRepo, taskRepo } from "../repositories";
 import * as Notifications from "expo-notifications";
 import Constants from "expo-constants";
 

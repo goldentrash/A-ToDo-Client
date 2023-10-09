@@ -1,11 +1,13 @@
 import { useState, useCallback, useContext } from "react";
 import { ToastAndroid } from "react-native";
-import { UserContext, LoadingContext } from "../context";
-import { FloatingButton, RegisterTaskModal } from "../view";
-import { WaitingPage, WorkingPage } from "../controller";
-import { taskService } from "../service";
-import { LIMIT_DEADLINE, SHORTCUT_LIST_DEADLINE } from "../constant";
-import { timestamp2string } from "./helper";
+import { UserContext, LoadingContext } from "../../contexts";
+import { WorkingPage } from "../controllers/WorkingPage";
+import { WaitingPage } from "../controllers/WaitingPage";
+import { taskService } from "../../services";
+import { LIMIT_DEADLINE, SHORTCUT_LIST_DEADLINE } from "../../constants";
+import { timestamp2string } from "../helper";
+import { RegisterTaskModal } from "../views/RegisterTaskModal";
+import { FloatingButton } from "../views/FloatingButton";
 
 export const UserMenu = () => {
   const [content, setContent] = useState("");

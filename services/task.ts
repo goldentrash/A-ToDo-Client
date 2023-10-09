@@ -1,5 +1,5 @@
-import { TaskVO, type UserVO } from "./types";
-import { taskRepo } from "../repository";
+import { TaskVO, type UserVO } from "./type";
+import { taskRepo } from "../repositories";
 
 export const taskService = {
   async register(

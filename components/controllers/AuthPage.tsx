@@ -1,8 +1,9 @@
 import { useState, useCallback, useContext } from "react";
 import { ToastAndroid } from "react-native";
-import { UserContext, LoadingContext } from "../context";
-import { SignIn, SignUpModal } from "../view";
-import { userService } from "../service";
+import { UserContext, LoadingContext } from "../../contexts";
+import { userService } from "../../services";
+import { SignIn } from "../views/SignIn";
+import { SignUpModal } from "../views/SignUpModal";
 
 export const AuthPage = () => {
   const [id, setId] = useState("");

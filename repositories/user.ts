@@ -1,4 +1,4 @@
-import { type UserDAO } from "../service";
+import { type UserDAO } from "../services";
 import Constants from "expo-constants";
 
 if (!Constants.expoConfig?.extra?.apiServer) throw Error("API Server Invalid");

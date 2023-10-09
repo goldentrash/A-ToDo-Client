@@ -1,14 +1,11 @@
 import { useState, useContext, useCallback, useRef } from "react";
 import { type TextInput, ToastAndroid } from "react-native";
-import { LoadingContext, UserContext } from "../context";
-import {
-  StartTaskModal,
-  TodoList,
-  TodoListItem,
-  type TodoListProps,
-} from "../view";
-import { timestamp2string } from "./helper";
-import { taskService } from "../service";
+import { LoadingContext, UserContext } from "../../contexts";
+import { timestamp2string } from "../helper";
+import { taskService } from "../../services";
+import { StartTaskModal } from "../views/StartTaskModal";
+import { TodoList, type TodoListProps } from "../views/TodoList";
+import { TodoListItem } from "../views/TodoListItem";
 
 export const WaitingPage = () => {
   const { startLoading, finishLoading } = useContext(LoadingContext);

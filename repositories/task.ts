@@ -1,4 +1,4 @@
-import { TaskVO, type TaskDAO } from "../service";
+import { TaskVO, type TaskDAO } from "../services";
 import Constants from "expo-constants";
 
 if (!Constants.expoConfig?.extra?.apiServer) throw Error("API Server Invalid");

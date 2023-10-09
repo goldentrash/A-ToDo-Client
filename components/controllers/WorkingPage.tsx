@@ -1,8 +1,9 @@
 import { useState, useCallback, useContext, useRef } from "react";
 import { type TextInput, ToastAndroid } from "react-native";
-import { LoadingContext, UserContext } from "../context";
-import { FinishTaskModal, Working } from "../view";
-import { taskService } from "../service";
+import { LoadingContext, UserContext } from "../../contexts";
+import { taskService } from "../../services";
+import { FinishTaskModal } from "../views/FinishTaskModal";
+import { Working } from "../views/Working";
 
 export const WorkingPage = () => {
   const { startLoading, finishLoading } = useContext(LoadingContext);

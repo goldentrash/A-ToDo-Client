@@ -21,7 +21,7 @@ module.exports = {
     assetBundlePatterns: ["**/*"],
     android: {
       package: "pe.kr.whitepiano.a_todo",
-      googleServicesFile: "./constant/google-services.json",
+      googleServicesFile: "./google-services.json",
       adaptiveIcon: {
         foregroundImage: "./assets/adaptive-icon.png",
         backgroundColor: "#ffffff",

@@ -1,11 +1,11 @@
 import { Pressable, Text, StyleSheet } from "react-native";
-import { type TaskVO } from "../service";
+import { type TaskVO } from "../../services";
 import {
   COLOR_BLACK,
   COLOR_WARNING,
   FONT_SIZE_HINT,
   FONT_SIZE_NORMAL,
-} from "../constant";
+} from "../../constants";
 
 export type TodoListItemProps = {
   todo: TaskVO;
