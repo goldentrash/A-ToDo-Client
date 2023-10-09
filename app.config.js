@@ -1,5 +1,3 @@
-if (process.env.NODE_ENV !== "production") require("dotenv").config();
-
 module.exports = {
   expo: {
     extra: {
@@ -8,7 +6,6 @@ module.exports = {
         projectId: "896ff724-3702-47b7-9461-c9568d871676",
       },
     },
-    // experiments: { tsconfigPaths: true }, available in SDK 49 and higher
     owner: "whitepiano",
     name: "A-ToDo",
     slug: "a-todo",
