@@ -40,6 +40,7 @@ export const userRepo: UserDAO = {
         .then((res) => res.json())
         .then((res) => {
           if (res.error) throw Error(res.error);
+          resolve();
         })
         .catch(reject);
     });
