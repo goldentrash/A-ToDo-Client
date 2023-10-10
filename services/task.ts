@@ -25,8 +25,9 @@ export const taskService = {
 
   async update(
     user: Pick<UserVO, "accessToken">,
-    task: Pick<TaskVO, "id" | "content">
+    task: TaskVO
   ): Promise<TaskVO> {
-    return await taskRepo.patchContent(user, task);
+    const content = await taskRepo.patchContent(user, task);
+    return { ...task, content };
   },
 };

@@ -84,12 +84,12 @@ export const taskRepo: TaskDAO = {
       body: JSON.stringify({ content }),
     };
 
-    return new Promise<TaskVO>((resolve, reject) => {
+    return new Promise<TaskVO["content"]>((resolve, reject) => {
       fetch(`${API_SERVER}/tasks/${taskId}/content`, option)
         .then((res) => res.json())
         .then((res) => {
           if (res.error) throw Error(res.error);
-          return resolve(res.data.task);
+          return resolve(res.data.content);
         })
         .catch(reject);
     });

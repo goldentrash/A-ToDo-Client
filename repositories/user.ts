@@ -20,7 +20,7 @@ export const userRepo: UserDAO = {
         .then((res) => res.json())
         .then((res) => {
           if (res.error) throw Error(res.error);
-          return resolve(res.data.token);
+          return resolve(res.data.access_token);
         })
         .catch(reject);
     });

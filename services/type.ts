@@ -21,7 +21,7 @@ export type TaskDAO = {
   patchContent(
     user: Pick<UserVO, "accessToken">,
     task: Pick<TaskVO, "id" | "content">
-  ): Promise<TaskVO>;
+  ): Promise<TaskVO["content"]>;
 };
 
 export type UserVO = {
