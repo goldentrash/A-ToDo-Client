@@ -16,7 +16,7 @@ export const userRepo: UserDAO = {
     };
 
     return new Promise<string>((resolve, reject) => {
-      fetch(`${API_SERVER}/users/${id}/token`, option)
+      fetch(`${API_SERVER}/users/${id}/access-token`, option)
         .then((res) => res.json())
         .then((res) => {
           if (res.error) throw Error(res.error);
@@ -46,11 +46,12 @@ export const userRepo: UserDAO = {
     });
   },
 
-  updatePushToken({ id }, push_token) {
+  patchPushToken({ id, accessToken }, push_token) {
     const option = {
       method: "PUT",
       headers: {
         "Content-Type": "application/json",
+        Authorization: `Bearer ${accessToken}`,
       },
       body: JSON.stringify({ push_token }),
     };

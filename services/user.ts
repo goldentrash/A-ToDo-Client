@@ -6,9 +6,9 @@ export const userService = {
     const accessToken = await userRepo.getAccessToken(user, password);
 
     const { data: pushToken } = await deviceRepo.getPushToken();
-    await userRepo.updatePushToken(user, pushToken);
+    await userRepo.patchPushToken({ ...user, accessToken }, pushToken);
 
-    const taskList = await taskRepo.getTaskList({ token: accessToken });
+    const taskList = await taskRepo.getTaskList({ accessToken });
     const [todoList, doing] = taskList.reduce<
       [UserVO["todoList"], UserVO["doing"]]
     >(
@@ -29,7 +29,7 @@ export const userService = {
 
     return {
       id: user.id,
-      token: accessToken,
+      accessToken,
       todoList,
       doing,
     };

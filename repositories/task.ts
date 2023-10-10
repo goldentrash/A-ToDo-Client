@@ -5,12 +5,12 @@ if (!Constants.expoConfig?.extra?.apiServer) throw Error("API Server Invalid");
 const API_SERVER = Constants.expoConfig.extra.apiServer;
 
 export const taskRepo: TaskDAO = {
-  getTaskList({ token }) {
+  getTaskList({ accessToken }) {
     const option = {
       method: "GET",
       headers: {
         Accept: "application/json",
-        Authorization: `Bearer ${token}`,
+        Authorization: `Bearer ${accessToken}`,
       },
     };
 
@@ -28,12 +28,12 @@ export const taskRepo: TaskDAO = {
     });
   },
 
-  post({ token }, { content, deadline }) {
+  post({ accessToken }, { content, deadline }) {
     const option = {
       method: "POST",
       headers: {
         Accept: "application/json",
-        Authorization: `Bearer ${token}`,
+        Authorization: `Bearer ${accessToken}`,
         "Content-Type": "application/json",
       },
       body: JSON.stringify({
@@ -53,12 +53,12 @@ export const taskRepo: TaskDAO = {
     });
   },
 
-  patchProgress({ token }, { id: taskId }, action) {
+  patchProgress({ accessToken }, { id: taskId }, action) {
     const option = {
       method: "PATCH",
       headers: {
         Accept: "application/json",
-        Authorization: `Bearer ${token}`,
+        Authorization: `Bearer ${accessToken}`,
       },
     };
 
@@ -73,12 +73,12 @@ export const taskRepo: TaskDAO = {
     });
   },
 
-  patchContent({ token }, { id: taskId, content }) {
+  patchContent({ accessToken }, { id: taskId, content }) {
     const option = {
       method: "PUT",
       headers: {
         Accept: "application/json",
-        Authorization: `Bearer ${token}`,
+        Authorization: `Bearer ${accessToken}`,
         "Content-Type": "application/json",
       },
       body: JSON.stringify({ content }),

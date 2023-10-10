@@ -8,25 +8,25 @@ export type TaskVO = {
 };
 
 export type TaskDAO = {
-  getTaskList(user: Pick<UserVO, "token">): Promise<TaskVO[]>;
+  getTaskList(user: Pick<UserVO, "accessToken">): Promise<TaskVO[]>;
   post(
-    user: Pick<UserVO, "token">,
+    user: Pick<UserVO, "accessToken">,
     task: Pick<TaskVO, "content" | "deadline">
   ): Promise<TaskVO>;
   patchProgress(
-    user: Pick<UserVO, "token">,
+    user: Pick<UserVO, "accessToken">,
     task: Pick<TaskVO, "id">,
     action: "start" | "finish"
   ): Promise<TaskVO>;
   patchContent(
-    user: Pick<UserVO, "token">,
+    user: Pick<UserVO, "accessToken">,
     task: Pick<TaskVO, "id" | "content">
   ): Promise<TaskVO>;
 };
 
 export type UserVO = {
   id: string;
-  token: string;
+  accessToken: string;
   todoList: TaskVO[];
   doing: null | TaskVO;
 };
@@ -35,10 +35,10 @@ export type UserDAO = {
   getAccessToken(
     user: Pick<UserVO, "id">,
     password: string
-  ): Promise<UserVO["token"]>;
+  ): Promise<UserVO["accessToken"]>;
   post(user: Pick<UserVO, "id">, password: string): Promise<void>;
-  updatePushToken(
-    user: Pick<UserVO, "id">,
+  patchPushToken(
+    user: Pick<UserVO, "id" | "accessToken">,
     push_token: string | null
   ): Promise<void>;
 };
