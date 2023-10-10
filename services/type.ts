@@ -1,3 +1,5 @@
+import { type ExpoPushToken } from "expo-notifications";
+
 export type TaskVO = {
   id: string;
   progress: "todo" | "doing";
@@ -35,4 +37,12 @@ export type UserDAO = {
     password: string
   ): Promise<UserVO["token"]>;
   post(user: Pick<UserVO, "id">, password: string): Promise<void>;
+  updatePushToken(
+    user: Pick<UserVO, "id">,
+    push_token: string | null
+  ): Promise<void>;
+};
+
+export type DeviceDAO = {
+  getPushToken(): Promise<ExpoPushToken>;
 };

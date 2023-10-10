@@ -45,4 +45,24 @@ export const userRepo: UserDAO = {
         .catch(reject);
     });
   },
+
+  updatePushToken({ id }, push_token) {
+    const option = {
+      method: "PUT",
+      headers: {
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify({ push_token }),
+    };
+
+    return new Promise<void>((resolve, reject) => {
+      fetch(`${API_SERVER}/users/${id}/push-token`, option)
+        .then((res) => res.json())
+        .then((res) => {
+          if (res.error) throw Error(res.error);
+          resolve();
+        })
+        .catch(reject);
+    });
+  },
 };

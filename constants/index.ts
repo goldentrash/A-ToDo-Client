@@ -17,3 +17,5 @@ export {
   FONT_SIZE_NORMAL,
   FONT_SIZE_TITLE,
 } from "./style";
+
+export { CHANNEL_ID, CHANNEL_IMPORTANCE, CHANNEL_NAME } from "./notification";
