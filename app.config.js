@@ -6,6 +6,16 @@ module.exports = {
         projectId: "896ff724-3702-47b7-9461-c9568d871676",
       },
     },
+    plugins: [
+      [
+        "expo-build-properties",
+        {
+          android: {
+            usesCleartextTraffic: true, // for HTTP request
+          },
+        },
+      ],
+    ],
     owner: "whitepiano",
     name: "A-ToDo",
     slug: "a-todo",
