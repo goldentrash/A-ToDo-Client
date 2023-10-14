@@ -15,7 +15,7 @@ import {
   FONT_SIZE_HINT,
   FONT_SIZE_TITLE,
   LIMIT_CONTENT_CHAR,
-} from "../constant";
+} from "../../constants";
 
 type Shortcut = {
   label: string;

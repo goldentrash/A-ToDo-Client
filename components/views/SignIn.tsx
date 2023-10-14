@@ -13,7 +13,7 @@ import {
   COLOR_LINK,
   FONT_SIZE_TITLE,
   FONT_SIZE_HINT,
-} from "../constant";
+} from "../../constants";
 
 export type SignInProps = {
   onSubmit(): void;

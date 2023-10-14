@@ -1,7 +1,8 @@
 import { StyleSheet, View, ActivityIndicator } from "react-native";
 import { StatusBar } from "expo-status-bar";
-import { AuthPage, UserMenu } from "../controller";
-import { COLOR_SHADOWED, COLOR_BACKGROUND } from "../constant";
+import { COLOR_SHADOWED, COLOR_BACKGROUND } from "../../constants";
+import { AuthPage } from "../controllers/AuthPage";
+import { UserMenu } from "../controllers/UserMenu";
 
 type RootProps = {
   isLoading: boolean;

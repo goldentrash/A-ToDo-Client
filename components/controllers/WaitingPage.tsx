@@ -1,14 +1,11 @@
 import { useState, useContext, useCallback, useRef } from "react";
 import { type TextInput, ToastAndroid } from "react-native";
-import { LoadingContext, UserContext } from "../context";
-import {
-  StartTaskModal,
-  TodoList,
-  TodoListItem,
-  type TodoListProps,
-} from "../view";
-import { timestamp2string } from "./helper";
-import { taskService } from "../service";
+import { LoadingContext, UserContext } from "../../contexts";
+import { timestamp2string } from "../helper";
+import { taskService } from "../../services";
+import { StartTaskModal } from "../views/StartTaskModal";
+import { TodoList, type TodoListProps } from "../views/TodoList";
+import { TodoListItem } from "../views/TodoListItem";
 
 export const WaitingPage = () => {
   const { startLoading, finishLoading } = useContext(LoadingContext);
@@ -47,6 +44,7 @@ export const WaitingPage = () => {
     if (targetIndex === null) throw Error("unreachable case");
 
     startLoading();
+    setTargetIndex(null);
     taskService
       .start(user, todoList[targetIndex])
       .then((doing) => {
@@ -58,12 +56,14 @@ export const WaitingPage = () => {
         });
         unselectTarget();
       })
-      .catch((_err) =>
+      .catch((_err) => {
+        setTargetIndex(targetIndex);
+
         ToastAndroid.show(
           "Fail to Start Task, please retry again",
           ToastAndroid.LONG
-        )
-      )
+        );
+      })
       .finally(finishLoading);
   }, [
     user,
@@ -83,18 +83,21 @@ export const WaitingPage = () => {
     contentModalInputRef.current?.blur();
 
     startLoading();
+    setTargetIndex(null);
     taskService
       .update(user, newTodo)
       .then(({ content }) => {
         todoList[targetIndex].content = content;
         setUser({ ...user, todoList: [...todoList] });
       })
-      .catch((_err) =>
+      .catch((_err) => {
+        setTargetIndex(targetIndex);
+
         ToastAndroid.show(
           "Fail to Save Content, please retry again",
           ToastAndroid.LONG
-        )
-      )
+        );
+      })
       .finally(finishLoading);
   }, [
     startLoading,

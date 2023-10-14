@@ -6,13 +6,13 @@ import {
   StyleSheet,
   ScrollView,
 } from "react-native";
-import { type TaskVO } from "../service";
+import { type TaskVO } from "../../services";
 import {
   COLOR_BACKGROUND,
   COLOR_SHADOWED,
   FONT_SIZE_NORMAL,
   FONT_SIZE_TITLE,
-} from "../constant";
+} from "../../constants";
 
 export type FinishTaskModalProps = {
   visible: boolean;

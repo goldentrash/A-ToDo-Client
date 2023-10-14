@@ -1,5 +1,5 @@
 import { createContext } from "react";
-import { type UserVO } from "../service";
+import { type UserVO } from "../services";
 
 export type User = UserVO | null;
 export type UserContext = {

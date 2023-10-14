@@ -1,12 +1,12 @@
 import { Button, Modal, Text, TextInput, StyleSheet, View } from "react-native";
-import { type TaskVO } from "../service";
+import { type TaskVO } from "../../services";
 import {
   COLOR_BACKGROUND,
   COLOR_SHADOWED,
   FONT_SIZE_HINT,
   FONT_SIZE_TITLE,
   LIMIT_CONTENT_CHAR,
-} from "../constant";
+} from "../../constants";
 
 export type StartTaskModalProps = {
   visible: boolean;

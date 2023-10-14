@@ -1,8 +1,9 @@
 import { useState, useCallback, useContext } from "react";
 import { ToastAndroid } from "react-native";
-import { UserContext, LoadingContext } from "../context";
-import { SignIn, SignUpModal } from "../view";
-import { userService } from "../service";
+import { UserContext, LoadingContext } from "../../contexts";
+import { userService } from "../../services";
+import { SignIn } from "../views/SignIn";
+import { SignUpModal } from "../views/SignUpModal";
 
 export const AuthPage = () => {
   const [id, setId] = useState("");
@@ -62,10 +63,13 @@ export const AuthPage = () => {
     if (!password) return setPasswordErrMsg("password Required");
 
     startLoading();
+    setModalVisible(false);
     userService
       .signUp({ id }, password)
       .then(closeModal)
       .catch((err) => {
+        setModalVisible(true);
+
         if (err.message === "User ID Duplicated")
           return setIdErrMsg("Duplicated User ID");
 
