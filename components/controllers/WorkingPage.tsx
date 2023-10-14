@@ -41,18 +41,21 @@ export const WorkingPage = () => {
 
   const finishDoing = useCallback(() => {
     startLoading();
+    setModalVisible(false);
     taskService
       .finish(user, doing)
       .then(() => {
         setUser({ ...user, doing: null });
         closeModal();
       })
-      .catch((_err) =>
+      .catch((_err) => {
+        setModalVisible(true);
+
         ToastAndroid.show(
           "Fail to Finish Task, please retry again",
           ToastAndroid.LONG
-        )
-      )
+        );
+      })
       .finally(finishLoading);
   }, [startLoading, finishLoading, user, setUser, closeModal, doing]);
 

@@ -63,10 +63,13 @@ export const AuthPage = () => {
     if (!password) return setPasswordErrMsg("password Required");
 
     startLoading();
+    setModalVisible(false);
     userService
       .signUp({ id }, password)
       .then(closeModal)
       .catch((err) => {
+        setModalVisible(true);
+
         if (err.message === "User ID Duplicated")
           return setIdErrMsg("Duplicated User ID");
 

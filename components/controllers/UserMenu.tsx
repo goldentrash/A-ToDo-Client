@@ -53,6 +53,7 @@ export const UserMenu = () => {
       );
 
     startLoading();
+    setModalVisible(false);
     taskService
       .register(user, {
         content,
@@ -71,12 +72,14 @@ export const UserMenu = () => {
         });
         closeModal();
       })
-      .catch((_err) =>
+      .catch((_err) => {
+        setModalVisible(true);
+
         ToastAndroid.show(
           "Fail to Register Task, please retry again",
           ToastAndroid.LONG
-        )
-      )
+        );
+      })
       .finally(finishLoading);
   }, [
     content,

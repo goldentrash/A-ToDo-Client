@@ -44,6 +44,7 @@ export const WaitingPage = () => {
     if (targetIndex === null) throw Error("unreachable case");
 
     startLoading();
+    setTargetIndex(null);
     taskService
       .start(user, todoList[targetIndex])
       .then((doing) => {
@@ -55,12 +56,14 @@ export const WaitingPage = () => {
         });
         unselectTarget();
       })
-      .catch((_err) =>
+      .catch((_err) => {
+        setTargetIndex(targetIndex);
+
         ToastAndroid.show(
           "Fail to Start Task, please retry again",
           ToastAndroid.LONG
-        )
-      )
+        );
+      })
       .finally(finishLoading);
   }, [
     user,
@@ -80,18 +83,21 @@ export const WaitingPage = () => {
     contentModalInputRef.current?.blur();
 
     startLoading();
+    setTargetIndex(null);
     taskService
       .update(user, newTodo)
       .then(({ content }) => {
         todoList[targetIndex].content = content;
         setUser({ ...user, todoList: [...todoList] });
       })
-      .catch((_err) =>
+      .catch((_err) => {
+        setTargetIndex(targetIndex);
+
         ToastAndroid.show(
           "Fail to Save Content, please retry again",
           ToastAndroid.LONG
-        )
-      )
+        );
+      })
       .finally(finishLoading);
   }, [
     startLoading,
