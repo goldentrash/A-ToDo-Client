@@ -10,16 +10,16 @@ import {
 } from 'react-native';
 
 const TodoList = ({ todoList, callApiThenFetchTodoListAndDoing }) => {
-  const [startDoingModalVisible, setStartDoingModalVisible] = useState(false);
-  const openStartDoingModal = () => setStartDoingModalVisible(true);
-  const closeStartDoingModal = () => setStartDoingModalVisible(false);
+  const [startTodoModalVisible, setStartTodoModalVisible] = useState(false);
+  const openStartTodoModal = () => setStartTodoModalVisible(true);
+  const closeStartTodoModal = () => setStartTodoModalVisible(false);
 
   const [watchingTodo, setWatchingTodo] = useState(null);
   const renderTodo = ({ item: todo }) => {
     const { content, deadline } = todo;
     const watchTodo = () => {
       setWatchingTodo(todo);
-      openStartDoingModal();
+      openStartTodoModal();
     };
 
     return (
@@ -38,10 +38,10 @@ const TodoList = ({ todoList, callApiThenFetchTodoListAndDoing }) => {
         renderItem={renderTodo}
       />
 
-      {startDoingModalVisible && (
-        <StartDoingModal
+      {startTodoModalVisible && (
+        <StartTodoModal
           callApiThenFetchTodoListAndDoing={callApiThenFetchTodoListAndDoing}
-          onRequestClose={closeStartDoingModal}
+          onRequestClose={closeStartTodoModal}
           watchingTodo={watchingTodo}
         />
       )}
@@ -49,12 +49,12 @@ const TodoList = ({ todoList, callApiThenFetchTodoListAndDoing }) => {
   );
 };
 
-const StartDoingModal = ({
+const StartTodoModal = ({
   callApiThenFetchTodoListAndDoing,
   onRequestClose,
   watchingTodo: { id, content, deadline },
 }) => {
-  const startDoingThenFetchTodoList = callApiThenFetchTodoListAndDoing(
+  const startTodoThenFetchTodoList = callApiThenFetchTodoListAndDoing(
     { path: '/doings', method: 'POST', body: { id } },
     onRequestClose
   );
@@ -63,14 +63,14 @@ const StartDoingModal = ({
     <Modal onRequestClose={onRequestClose}>
       <View style={styles.modalBackground}>
         <View style={styles.modalForeground}>
-          <Text style={styles.modalTitle}>Start Doing</Text>
+          <Text style={styles.modalTitle}>Start Todo</Text>
 
           <View style={styles.modalTextContainer}>
             <Text style={styles.modalTextContent}>{content}</Text>
             <Text style={styles.modalTextDeadline}>{deadline}</Text>
           </View>
 
-          <Button onPress={startDoingThenFetchTodoList} title="start doing" />
+          <Button onPress={startTodoThenFetchTodoList} title="start todo" />
         </View>
       </View>
     </Modal>
