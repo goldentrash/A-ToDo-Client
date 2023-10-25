@@ -1,16 +1,16 @@
 import { StyleSheet, View, ActivityIndicator } from "react-native";
 import { StatusBar } from "expo-status-bar";
-import { type User } from "../context";
-import { AuthPage, UserMenu } from "../container";
+import { AuthPage, UserMenu } from "../controller";
+import { COLOR_SHADOWED, COLOR_BACKGROUND } from "../constant";
 
 type RootProps = {
   isLoading: boolean;
-  user: User | null;
+  isLogin: boolean;
 };
-export const Root = ({ isLoading, user }: RootProps) => {
+export const Root = ({ isLoading, isLogin }: RootProps) => {
   return (
     <View style={styles.container} pointerEvents={isLoading ? "none" : "auto"}>
-      {user ? <UserMenu /> : <AuthPage />}
+      {isLogin ? <UserMenu /> : <AuthPage />}
 
       {isLoading && (
         <View style={styles.activityIndicatorContainer}>
@@ -25,7 +25,7 @@ export const Root = ({ isLoading, user }: RootProps) => {
 
 const styles = StyleSheet.create({
   activityIndicatorContainer: {
-    backgroundColor: "#ecf0f180",
+    backgroundColor: COLOR_SHADOWED,
     height: "100%",
     justifyContent: "center",
     position: "absolute",
@@ -33,7 +33,7 @@ const styles = StyleSheet.create({
   },
   container: {
     alignItems: "center",
-    backgroundColor: "#fff",
+    backgroundColor: COLOR_BACKGROUND,
     flex: 1,
     paddingTop: "20%",
   },

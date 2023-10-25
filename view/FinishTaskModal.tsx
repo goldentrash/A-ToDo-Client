@@ -6,19 +6,25 @@ import {
   StyleSheet,
   ScrollView,
 } from "react-native";
-import { type Task } from "../context";
+import { type TaskVO } from "../service";
+import {
+  COLOR_BACKGROUND,
+  COLOR_SHADOWED,
+  FONT_SIZE_NORMAL,
+  FONT_SIZE_TITLE,
+} from "../constant";
 
 export type FinishTaskModalProps = {
   visible: boolean;
-  onSubmit: () => void;
-  onCancel: () => void;
-  doing: Task;
+  onSubmit(): void;
+  onCancel(): void;
+  doing: TaskVO;
 };
 export const FinishTaskModal = ({
   visible,
   onSubmit,
   onCancel,
-  doing,
+  doing: { content },
 }: FinishTaskModalProps) => {
   return (
     <Modal visible={visible} onRequestClose={onCancel}>
@@ -26,9 +32,11 @@ export const FinishTaskModal = ({
         <View style={styles.modalForeground}>
           <Text style={styles.modalTitle}>Finish Task</Text>
 
-          <ScrollView style={styles.modalTextContainer}>
-            <Text style={styles.modalTextContent}>{doing.content}</Text>
-          </ScrollView>
+          <View style={styles.modalTextContainer}>
+            <ScrollView style={styles.modalContentContainer}>
+              <Text style={styles.modalTextContent}>{content}</Text>
+            </ScrollView>
+          </View>
 
           <Button onPress={onSubmit} title="Finish Task" />
         </View>
@@ -40,12 +48,18 @@ export const FinishTaskModal = ({
 const styles = StyleSheet.create({
   modalBackground: {
     alignItems: "center",
-    backgroundColor: "#ecf0f180",
+    backgroundColor: COLOR_SHADOWED,
     flex: 1,
     justifyContent: "center",
   },
+  modalContentContainer: {
+    borderRadius: 4,
+    borderWidth: 1,
+    height: 230,
+    padding: 6,
+  },
   modalForeground: {
-    backgroundColor: "#ffffff",
+    backgroundColor: COLOR_BACKGROUND,
     borderRadius: 8,
     borderWidth: 1,
     gap: 12,
@@ -56,14 +70,13 @@ const styles = StyleSheet.create({
   modalTextContainer: {
     borderTopWidth: 1,
     gap: 8,
-    height: 230,
-    paddingVertical: 16,
+    paddingTop: 16,
   },
   modalTextContent: {
-    fontSize: 16,
+    fontSize: FONT_SIZE_NORMAL,
   },
   modalTitle: {
-    fontSize: 18,
+    fontSize: FONT_SIZE_TITLE,
     fontWeight: "bold",
   },
 });

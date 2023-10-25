@@ -14,7 +14,7 @@ A-ToDo를 관통하는 가장 큰 키워드는 '집중'입니다. 그래서 간�
 
 ## apk
 
-see [expo](https://expo.dev/accounts/whitepiano/projects/a-todo)
+download [LTS](https://expo.dev/accounts/whitepiano/projects/a-todo/builds/9ac73d45-b3e8-420d-8c56-ff6acec9ddd3)
 
 ## version comments
 
