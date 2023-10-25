@@ -24,20 +24,19 @@ const Doing = ({
     setMemo(text);
 
     if (timeoutId) clearTimeout(timeoutId);
-    const latestTimeoutId = setTimeout(
-      () =>
-        callApiThenFetchDoing(
-          {
-            path: `/doings/${doing.id}/memos`,
-            method: 'PUT',
-            body: { memo: text },
-          },
-          () => {
-            ToastAndroid.show('memo saved', ToastAndroid.SHORT);
-          }
-        ),
-      3_000
+
+    const saveMemoThenFetchDoing = callApiThenFetchDoing(
+      {
+        path: `/doings/${doing.id}/memos`,
+        method: 'PUT',
+        body: { memo: text },
+      },
+      () => {
+        ToastAndroid.show('memo saved', ToastAndroid.SHORT);
+      }
     );
+
+    const latestTimeoutId = setTimeout(saveMemoThenFetchDoing, 8_000);
     setTimeoutId(latestTimeoutId);
   };
 
