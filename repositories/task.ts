@@ -1,16 +1,16 @@
-import { TaskVO, type TaskDAO } from "../service";
+import { TaskVO, type TaskDAO } from "../services";
 import Constants from "expo-constants";
 
 if (!Constants.expoConfig?.extra?.apiServer) throw Error("API Server Invalid");
 const API_SERVER = Constants.expoConfig.extra.apiServer;
 
 export const taskRepo: TaskDAO = {
-  getTaskList({ token }) {
+  getTaskList({ accessToken }) {
     const option = {
       method: "GET",
       headers: {
         Accept: "application/json",
-        Authorization: `Bearer ${token}`,
+        Authorization: `Bearer ${accessToken}`,
       },
     };
 
@@ -28,12 +28,12 @@ export const taskRepo: TaskDAO = {
     });
   },
 
-  post({ token }, { content, deadline }) {
+  post({ accessToken }, { content, deadline }) {
     const option = {
       method: "POST",
       headers: {
         Accept: "application/json",
-        Authorization: `Bearer ${token}`,
+        Authorization: `Bearer ${accessToken}`,
         "Content-Type": "application/json",
       },
       body: JSON.stringify({
@@ -53,12 +53,12 @@ export const taskRepo: TaskDAO = {
     });
   },
 
-  patchProgress({ token }, { id: taskId }, action) {
+  patchProgress({ accessToken }, { id: taskId }, action) {
     const option = {
       method: "PATCH",
       headers: {
         Accept: "application/json",
-        Authorization: `Bearer ${token}`,
+        Authorization: `Bearer ${accessToken}`,
       },
     };
 
@@ -73,23 +73,23 @@ export const taskRepo: TaskDAO = {
     });
   },
 
-  patchContent({ token }, { id: taskId, content }) {
+  patchContent({ accessToken }, { id: taskId, content }) {
     const option = {
       method: "PUT",
       headers: {
         Accept: "application/json",
-        Authorization: `Bearer ${token}`,
+        Authorization: `Bearer ${accessToken}`,
         "Content-Type": "application/json",
       },
       body: JSON.stringify({ content }),
     };
 
-    return new Promise<TaskVO>((resolve, reject) => {
+    return new Promise<TaskVO["content"]>((resolve, reject) => {
       fetch(`${API_SERVER}/tasks/${taskId}/content`, option)
         .then((res) => res.json())
         .then((res) => {
           if (res.error) throw Error(res.error);
-          return resolve(res.data.task);
+          return resolve(res.data.content);
         })
         .catch(reject);
     });

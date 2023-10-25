@@ -7,7 +7,7 @@ import {
   FONT_SIZE_TITLE,
   LIMIT_PASSWORD_CHAR,
   LIMIT_USER_ID_CHAR,
-} from "../constant";
+} from "../../constants";
 
 export type SignUpModalProps = {
   visible: boolean;

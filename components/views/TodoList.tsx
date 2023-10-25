@@ -5,8 +5,8 @@ import {
   StyleSheet,
   View,
 } from "react-native";
-import { type TaskVO } from "../service";
-import { FONT_SIZE_TITLE } from "../constant";
+import { type TaskVO } from "../../services";
+import { FONT_SIZE_TITLE } from "../../constants";
 
 export type TodoListProps = {
   todoList: TaskVO[];

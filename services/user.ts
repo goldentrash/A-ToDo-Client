@@ -1,11 +1,14 @@
-import { type UserVO } from "./types";
-import { userRepo, taskRepo } from "../repository";
+import { type UserVO } from "./type";
+import { userRepo, taskRepo, deviceRepo } from "../repositories";
 
 export const userService = {
   async signIn(user: Pick<UserVO, "id">, password: string): Promise<UserVO> {
     const accessToken = await userRepo.getAccessToken(user, password);
 
-    const taskList = await taskRepo.getTaskList({ token: accessToken });
+    const { data: pushToken } = await deviceRepo.getPushToken();
+    await userRepo.patchPushToken({ ...user, accessToken }, pushToken);
+
+    const taskList = await taskRepo.getTaskList({ accessToken });
     const [todoList, doing] = taskList.reduce<
       [UserVO["todoList"], UserVO["doing"]]
     >(
@@ -26,7 +29,7 @@ export const userService = {
 
     return {
       id: user.id,
-      token: accessToken,
+      accessToken,
       todoList,
       doing,
     };

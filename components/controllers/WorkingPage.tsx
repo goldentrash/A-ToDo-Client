@@ -1,8 +1,10 @@
 import { useState, useCallback, useContext, useRef } from "react";
 import { type TextInput, ToastAndroid } from "react-native";
-import { LoadingContext, UserContext } from "../context";
-import { FinishTaskModal, Working } from "../view";
-import { taskService } from "../service";
+import { LoadingContext, UserContext } from "../../contexts";
+import { taskService } from "../../services";
+import { timestamp2string } from "../helper";
+import { FinishTaskModal } from "../views/FinishTaskModal";
+import { Working } from "../views/Working";
 
 export const WorkingPage = () => {
   const { startLoading, finishLoading } = useContext(LoadingContext);
@@ -39,38 +41,41 @@ export const WorkingPage = () => {
 
   const finishDoing = useCallback(() => {
     startLoading();
+    setModalVisible(false);
     taskService
       .finish(user, doing)
       .then(() => {
         setUser({ ...user, doing: null });
         closeModal();
       })
-      .catch((_err) =>
+      .catch((_err) => {
+        setModalVisible(true);
+
         ToastAndroid.show(
           "Fail to Finish Task, please retry again",
           ToastAndroid.LONG
-        )
-      )
+        );
+      })
       .finally(finishLoading);
   }, [startLoading, finishLoading, user, setUser, closeModal, doing]);
 
+  const todayString = timestamp2string(Date.now());
   return (
     <>
       <Working
-        submitTitle={
-          input === user.doing.content ? "Finish Task" : "Save Content"
-        }
-        onSubmit={input === user.doing.content ? openModal : saveContent}
-        task={user.doing}
+        submitTitle={input === doing.content ? "Finish Task" : "Save Content"}
+        onSubmit={input === doing.content ? openModal : saveContent}
+        task={doing}
         input={input}
         onUpdateInput={setInput}
         inputRef={inputRef}
+        status={todayString > doing.deadline ? "overdue" : "leisurely"}
       />
       <FinishTaskModal
         visible={modalVisible}
         onSubmit={finishDoing}
         onCancel={closeModal}
-        doing={user.doing}
+        doing={doing}
       />
     </>
   );
