@@ -35,7 +35,7 @@ export default function App() {
         .catch((err) => {
           ToastAndroid.show(
             'fail to fetch, please try again later',
-            ToastAndroid.LONG
+            ToastAndroid.SHORT
           );
         })
         .finally(() => {
@@ -83,6 +83,12 @@ export default function App() {
       fetchTodoList();
     });
 
+  const callApiThenFetchDoing = (requestArgs, callback) =>
+    callApi(requestArgs, () => {
+      callback();
+      fetchDoing();
+    });
+
   const callApiThenFetchTodoListAndDoing = (requestArgs, callback) =>
     callApi(requestArgs, () => {
       callback();
@@ -98,6 +104,7 @@ export default function App() {
         {doing ? (
           <Doing
             doing={doing}
+            callApiThenFetchDoing={callApiThenFetchDoing}
             callApiThenFetchTodoListAndDoing={callApiThenFetchTodoListAndDoing}
           />
         ) : (
