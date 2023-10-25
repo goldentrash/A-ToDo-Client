@@ -64,7 +64,7 @@ export const WorkingPage = () => {
     [user]
   );
   const finishTaskResHandler = useCallback<RseponseHandler>(() => {
-    setUser({ ...user, state: "rest" });
+    setUser({ ...user, state: "rest", doing: null });
     closeModal();
   }, [user, setUser, closeModal]);
   const finishTaskErrHandler = useCallback<ErrorHandler>(
