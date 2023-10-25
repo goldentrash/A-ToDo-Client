@@ -8,7 +8,7 @@ see [wiki](https://github.com/goldentrash/A-ToDo-Client/wiki)
 
 ## apk
 
-download [LTS](https://expo.dev/accounts/whitepiano/projects/a-todo/builds/9ac73d45-b3e8-420d-8c56-ff6acec9ddd3)
+download [LTS](https://expo.dev/accounts/whitepiano/projects/a-todo/builds/ae53b57d-a6ea-4247-aae5-18d07d8afa53)
 
 ## 목표
 
