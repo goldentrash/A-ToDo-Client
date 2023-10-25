@@ -2,11 +2,14 @@
   "name": "a-todo-client",
   "version": "0.0.0",
   "main": "node_modules/expo/AppEntry.js",
+  "engines": {
+    "node": "^18.13.0"
+  },
+  "repository": "https://github.com/goldentrash/A-ToDo-Client.git",
+  "author": "goldentrash <startoflateness@gmail.com>",
   "scripts": {
     "start": "expo start",
-    "android": "expo start --android",
-    "ios": "expo start --ios",
-    "web": "expo start --web"
+    "build": "eas build --platform android --profile preview"
   },
   "dependencies": {
     "expo": "~48.0.18",
@@ -15,7 +18,9 @@
     "react-native": "0.71.8"
   },
   "devDependencies": {
-    "@babel/core": "^7.20.0"
+    "@babel/core": "^7.20.0",
+    "dotenv": "^16.3.1",
+    "eas-cli": "^3.14.0"
   },
   "private": true
 }
