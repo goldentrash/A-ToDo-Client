@@ -1,11 +1,11 @@
 import * as Notifications from "expo-notifications";
-import Constants from "expo-constants";
 import { type DeviceDAO } from "../services";
-import { CHANNEL_ID, CHANNEL_IMPORTANCE, CHANNEL_NAME } from "../constants";
-
-if (!Constants.expoConfig?.extra?.eas?.projectId)
-  throw Error("Missing Project ID");
-const PROJECT_ID = Constants.expoConfig?.extra?.eas?.projectId;
+import {
+  CHANNEL_ID,
+  CHANNEL_IMPORTANCE,
+  CHANNEL_NAME,
+  PROJECT_ID,
+} from "../constants";
 
 export const deviceRepo: DeviceDAO = {
   async getPushToken() {

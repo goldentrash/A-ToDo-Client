@@ -19,3 +19,5 @@ export {
 } from "./style";
 
 export { CHANNEL_ID, CHANNEL_IMPORTANCE, CHANNEL_NAME } from "./notification";
+
+export { PROJECT_ID, API_SERVER } from "./config";
