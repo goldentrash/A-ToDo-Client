@@ -1,8 +1,5 @@
 import { TaskVO, type TaskDAO } from "../services";
-import Constants from "expo-constants";
-
-if (!Constants.expoConfig?.extra?.apiServer) throw Error("API Server Invalid");
-const API_SERVER = Constants.expoConfig.extra.apiServer;
+import { API_SERVER } from "../constants";
 
 export const taskRepo: TaskDAO = {
   getTaskList({ accessToken }) {
