@@ -6,7 +6,7 @@ on:
       - master
 
 jobs:
-  Continuous_Delivery:
+  Build:
     runs-on: ubuntu-22.04
 
     steps:
@@ -20,7 +20,7 @@ jobs:
           cache: yarn
 
       - name: Install dependencies
-        run: yarn --frozen-lockfile
+        run: yarn
 
       - name: Connect to Expo
         uses: expo/expo-github-action@v8
